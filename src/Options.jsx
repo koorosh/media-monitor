@@ -1,27 +1,40 @@
 import React from 'react';
+import { Col, Nav, NavItem, Row, Tab} from 'react-bootstrap';
 
 export class Options extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoggedIn: false,
+      projects: [],
+    }
+  }
 
   render() {
     return (
       <div className="container-fluid">
-        <form>
-          <div className="form-group">
-            <label htmlFor="exampleInputEmail1">Email address</label>
-            <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
-              <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-          </div>
-          <div className="form-group">
-            <label htmlFor="exampleInputPassword1">Password</label>
-            <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" />
-          </div>
-          <div className="form-check">
-            <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-              <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
-          </div>
-          <button type="submit" className="btn btn-primary">Submit</button>
-        </form>
+        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+          <Row className="clearfix">
+            <Col sm={1}>
+              <Nav bsStyle="pills" stacked>
+                <NavItem eventKey="first">User</NavItem>
+                <NavItem eventKey="second">Projects</NavItem>
+                <NavItem eventKey="third">New Project</NavItem>
+              </Nav>
+            </Col>
+            <Col sm={11}>
+              <Tab.Content animation>
+                <Tab.Pane eventKey="first">Tab 1 content</Tab.Pane>
+                <Tab.Pane eventKey="second">Tab 2 content</Tab.Pane>
+                <Tab.Pane eventKey="third">Tab 2 content</Tab.Pane>
+              </Tab.Content>
+            </Col>
+          </Row>
+        </Tab.Container>
       </div>
+
     )
   }
 }
