@@ -1,8 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const rootApp = document.getElementById('root');
+const optionsApp = document.getElementById('options-root');
+
+if (rootApp) {
+  import('./App').then(({ App }) =>
+    ReactDOM.render(<App />, rootApp));
+} else if (optionsApp) {
+  import('./Options').then(({ Options }) =>
+    ReactDOM.render(<Options />, optionsApp));
+}
+
 registerServiceWorker();
