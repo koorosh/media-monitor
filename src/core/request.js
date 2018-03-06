@@ -10,10 +10,8 @@ export const Request = {
       params: params
     })
   },
-  post: (url, body, params) => {
-    return axios.post(url, body, {
-      params: params
-    })
+  post: (url, body, config) => {
+    return axios.post(url, body, config)
   }
 };
 

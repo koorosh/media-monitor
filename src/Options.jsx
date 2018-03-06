@@ -1,5 +1,9 @@
 import React from 'react';
-import { Col, Nav, NavItem, Row, Tab} from 'react-bootstrap';
+import { Tab, Tabs } from 'react-bootstrap';
+import {Auth} from "./core/auth";
+import {ProjectForm} from "./components/project-form/project-form";
+import {ProjectsList} from "./components/projects-list/projects-list";
+import {Spreadsheet} from "./core/spreadsheet";
 
 export class Options extends React.Component {
 
@@ -7,34 +11,79 @@ export class Options extends React.Component {
     super(props);
 
     this.state = {
+      activeTab: '1',
       isLoggedIn: false,
       projects: [],
-    }
+    };
+
+    this.onActiveProjectChange = this.onActiveProjectChange.bind(this);
+    this.onNewProject = this.onNewProject.bind(this);
+  }
+
+  componentDidMount() {
+    Auth.onSignInChanged((userInfo, isSignedIn) => {
+      console.log(userInfo);
+      this.setState({
+        isLoggedIn: isSignedIn
+      });
+    });
+
+    Auth.getToken((token) => {
+      this.setState({
+        isLoggedIn: !!token
+      });
+      console.log(token)
+    });
+
+    this.getProjects();
+  }
+
+  getProjects() {
+    Spreadsheet.getAll((items) => {
+      this.setState({
+        projects: items
+      })
+    })
+  }
+
+  onActiveProjectChange(projectId) {
+    Spreadsheet.setActive(projectId, () => {
+      this.getProjects();
+    })
+  }
+
+  onNewProject(project) {
+    console.log(project);
+    Spreadsheet.create(project, () => {
+      this.getProjects();
+    });
   }
 
   render() {
+
+    const projects = this.state.projects.map((project) => {
+      return {
+        id: project.spreadsheetId,
+        title: project.title,
+        isActive: project.isActive,
+      }
+    });
+
     return (
       <div className="container-fluid">
-        <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-          <Row className="clearfix">
-            <Col sm={1}>
-              <Nav bsStyle="pills" stacked>
-                <NavItem eventKey="first">User</NavItem>
-                <NavItem eventKey="second">Projects</NavItem>
-                <NavItem eventKey="third">New Project</NavItem>
-              </Nav>
-            </Col>
-            <Col sm={11}>
-              <Tab.Content animation>
-                <Tab.Pane eventKey="first">Tab 1 content</Tab.Pane>
-                <Tab.Pane eventKey="second">Tab 2 content</Tab.Pane>
-                <Tab.Pane eventKey="third">Tab 2 content</Tab.Pane>
-              </Tab.Content>
-            </Col>
-          </Row>
-        </Tab.Container>
+        <Tabs defaultActiveKey={1} id="options-tabs">
+          <Tab eventKey={1}
+               title="Projects"
+               disabled={!this.state.isLoggedIn}>
+            <ProjectsList onChange={this.onActiveProjectChange} projects={projects}/>
+          </Tab>
+          <Tab eventKey={2}
+               title="New Project"
+               disabled={!this.state.isLoggedIn}>
+            <ProjectForm onSubmit={ (project) => this.onNewProject(project)}/>
+          </Tab>
+        </Tabs>
       </div>
-
     )
   }
 }

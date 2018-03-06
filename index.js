@@ -1,6 +1,6 @@
 const API_KEY = 'AIzaSyCh4KU1aTpx9fl2TRVjxtn8aM3o1n_xFYs';
 
-function configureAxias(userToken) {
+function configureAxias1(userToken) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${userToken}`;
 }
 
