@@ -2,10 +2,10 @@ export class Storage {
   static updateItem(projectName, data, callback = () => {}) {
     let items = {};
     items[projectName] = data;
-    window.chrome.storage.sync.set(items, callback);
+    window.chrome.storage.local.set(items, callback);
   }
   static updateAll(data, callback = () => {}) {
-    window.chrome.storage.sync.set(data, callback);
+    window.chrome.storage.local.set(data, callback);
   }
   static setActiveStatus(spreadsheetId, status=true, callback = () => {}) {
     this.getData((items) => {
@@ -25,8 +25,12 @@ export class Storage {
     })
   }
   static getData(callback) {
-    window.chrome.storage.sync.get(null, function (items) {
+    window.chrome.storage.local.get(null, function (items) {
       callback(window.chrome.runtime.lastError ? null : items)
     });
+  }
+
+  static clearAll(callback) {
+    window.chrome.storage.local.clear(callback);
   }
 }

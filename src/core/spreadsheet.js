@@ -6,7 +6,7 @@ export class Spreadsheet {
     const {title, categories, isActive} = item;
 
     return Endpoint.createSpreadsheet(title).then(({data}) => {
-      const item = {
+      const model = {
         spreadsheetId: data.spreadsheetId,
         title: data.properties.title,
         sheetId: data.sheets && data.sheets.length > 0 ?
@@ -14,8 +14,11 @@ export class Spreadsheet {
         categories
       };
 
-      Storage.updateItem(item.spreadsheetId, item, () => {
-        Storage.setActiveStatus(item.spreadsheetId, isActive, callback)
+      const headers = ['Date', 'Site', ...categories.map(c => c.name)];
+      Spreadsheet.addRow([headers], data.spreadsheetId);
+
+      Storage.updateItem(model.spreadsheetId, model, () => {
+        Storage.setActiveStatus(model.spreadsheetId, isActive, callback)
       })
     });
   }
@@ -26,5 +29,9 @@ export class Spreadsheet {
 
   static setActive(spreadsheetId, callback) {
     Storage.setActiveStatus(spreadsheetId, true, callback);
+  }
+
+  static addRow(data, spreadsheetId) {
+    return Endpoint.appendRow(data, spreadsheetId);
   }
 }

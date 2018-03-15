@@ -10,16 +10,7 @@ export class ProjectForm extends React.Component {
     this.state = {
       title: '',
       isActive: false,
-      categories: [
-        {
-          name: 'Gender',
-          values: ['Ч-Е', 'Ж-Е']
-        },
-        {
-          name: 'Category',
-          values: ['Політика', 'Економіка']
-        }
-      ]
+      categories: []
     };
 
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -27,34 +18,29 @@ export class ProjectForm extends React.Component {
     this.categoryStateToValue = this.categoryStateToValue.bind(this);
     this.categoryValueToState = this.categoryValueToState.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.newCategory = this.newCategory.bind(this);
+    this.onCategoryNameChange = this.onCategoryNameChange.bind(this);
   }
 
   categoryValueToState(value='') {
-    return value.split(',').map(v => v.trim());
+    return value.split(',');
   }
 
   categoryStateToValue(value) {
-    return value.join(', ');
+    return value.map(v => v.trim()).join(', ');
   }
 
   handleNameChange(e) {
     this.setState({ title: e.target.value });
   }
 
-  handleCategoryValueChange(categoryName, e) {
-
+  handleCategoryValueChange(id, e) {
     const value = this.categoryValueToState(e.target.value);
-
     const categories = this.state.categories.map((category) => {
-
-      if (category.name === categoryName) {
-        return {
-          name: categoryName,
-          values: value
-        }
-      } else {
-        return category
+      if (category.id === id) {
+        category.values = value;
       }
+      return category
     });
 
     this.setState({
@@ -66,17 +52,40 @@ export class ProjectForm extends React.Component {
     this.props.onSubmit(this.state)
   }
 
+  newCategory() {
+    const category = { id: this.state.categories.length, name: 'New Category', values: [] };
+    this.setState({
+      categories: [...this.state.categories, category]
+    })
+  }
+
+  onCategoryNameChange(categoryId, name) {
+    this.setState({
+      categories: this.state.categories.map(c => {
+        if (c.id === categoryId) {
+          c.name = name
+        }
+        return c;
+      })
+    })
+  }
+
   render() {
     const categories = this.state.categories.map((category) => {
       const value = this.categoryStateToValue(category.values);
       return (
         <FormGroup>
-          <ControlLabel>{category.name}</ControlLabel>
+          <FormControl
+            type="text"
+            value={category.name}
+            placeholder="Category name"
+            onChange={(e) => this.onCategoryNameChange(category.id, e.target.value)}
+          />
           <FormControl componentClass="textarea"
                        className="textarea-compact"
                        placeholder="Type options separated by comma, for example: Політика, Економіка, Спорт..."
                        value={value}
-                       onChange={(e) => this.handleCategoryValueChange(category.name, e)} />
+                       onChange={(e) => this.handleCategoryValueChange(category.id, e)} />
         </FormGroup>
       )
     });
@@ -95,6 +104,8 @@ export class ProjectForm extends React.Component {
 
         {React.Children.toArray(categories)}
 
+        <Button onClick={this.newCategory} type="button">New Category</Button>
+        <br/>
         <Button onClick={this.onSubmit} type="button">Create</Button>
       </Form>
     )
