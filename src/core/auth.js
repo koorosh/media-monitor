@@ -9,8 +9,6 @@ export const Auth = {
    * @returns {Observable<string>}
    */
   getToken: (callback) => {
-    //const getAuthToken = Observable.bindCallback(window.chrome.identity.getAuthToken);
-    //return getAuthToken({ 'interactive': true });
     window.chrome.identity.getAuthToken({ 'interactive': true }, (token) => {
       if (!window.chrome.runtime.lastError) {
         window.chrome.identity.removeCachedAuthToken({ token: token }, () => Auth.getToken(callback))

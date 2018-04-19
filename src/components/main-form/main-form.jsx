@@ -53,7 +53,7 @@ export class MainForm extends React.Component {
     const data = map(sortBy(selectedValues, v => v[0]), i => i[1]);
 
     getLinkOnCurrentSite((url, siteTitle) => {
-      const link = `=HYPERLINK(\"${url}\",\"${siteTitle}\")`;
+      const link = `=HYPERLINK(\"${url}\";\"${siteTitle}\")`;
       Spreadsheet.addRow([['', link, ...data]], this.props.project.spreadsheetId)
     });
   }

@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import registerServiceWorker from './registerServiceWorker';
 import {Auth} from "./core/auth";
 import {configureAxios} from "./core/request";
+import {Options} from './Options';
 
-const rootApp = document.getElementById('root');
-const optionsApp = document.getElementById('options-root');
+const root = document.getElementById('root');
 
 if (!window.chrome.identity) {
   const callbacks = [];
@@ -60,16 +59,5 @@ if (!window.chrome.runtime) {
 Auth.getToken((token) => {
 
   configureAxios(token);
-
-  if (rootApp) {
-    import('./App').then(({App}) =>
-      ReactDOM.render(<App/>, rootApp));
-  } else if (optionsApp) {
-    import('./Options').then(({Options}) =>
-      ReactDOM.render(<Options/>, optionsApp));
-  }
+  ReactDOM.render(<Options/>, root);
 });
-
-
-
-registerServiceWorker();
