@@ -55,6 +55,7 @@ export class MainForm extends React.Component {
     getLinkOnCurrentSite((url, siteTitle) => {
       const link = `=HYPERLINK(\"${url}\";\"${siteTitle}\")`;
       Spreadsheet.addRow([['', link, ...data]], this.props.project.spreadsheetId)
+        .then(() => window.close())
     });
   }
 
