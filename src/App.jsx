@@ -3,6 +3,7 @@ import './App.css';
 import {MainForm} from "./components/main-form/main-form";
 import {Storage} from "./core/storage";
 import {Auth} from "./core/auth";
+import {configureAxios} from "./core/request";
 
 export class App extends Component {
 
@@ -32,7 +33,8 @@ export class App extends Component {
       this.setState({
         isLoggedIn: !!token
       });
-      console.log(token)
+
+      configureAxios(token);
     });
 
     Storage.getData(projects => {

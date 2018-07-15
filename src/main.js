@@ -56,7 +56,8 @@ if (!window.chrome.runtime) {
   window.chrome.runtime = { lastError: null }
 }
 
-Auth.getToken((token) => {
-  configureAxios(token);
+//Auth.getToken((token) => {
+  //let toket = "ya29.Glv4BRBohzRMxlLEA5BDrAS4SLu8jkNDeo4SkFj7hd1-mI5_OMgji9DgruX2a5u8YtsRkBJG3lLfn8ALTqxyxdte8cX0bSzN4s8F-pvEugoqrA4868zWUOHTJC6r"
+  //configureAxios(token);
   ReactDOM.render(<App/>, root);
-});
+//});
