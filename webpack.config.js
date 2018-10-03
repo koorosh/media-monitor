@@ -20,13 +20,14 @@ const OptionsHtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, 'src/main.js'),
-    options: path.resolve(__dirname, 'src/options.js')
+    main: path.resolve(__dirname, './src/main.tsx'),
+    options: path.resolve(__dirname, './src/options.tsx')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[hash].js'
   },
+  mode: 'none',
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',
@@ -34,40 +35,42 @@ module.exports = {
     inline: true,
     port: process.env.PORT || 3000,
     historyApiFallback: true,
+    hot: true
   },
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      },
       {
         test: /\.css$/,
         use: [
           { loader: "style-loader" },
           { loader: "css-loader" }
         ]
-      }, {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: "babel-loader"
-      }, {
-        test: /\.jsx$/,
-        exclude: /node_modules/,
-        use: "babel-loader"
-      }, {
+      },
+      {
         test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: 'url-loader?limit=10000',
-      }, {
+      },
+      {
         test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
         use: 'file-loader',
-      }, {
+      },
+      {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
           'file-loader?name=images/[name].[ext]',
           'image-webpack-loader?bypassOnDebug'
         ]
-      }
+      },
+      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx','.css'],
+    extensions: ['.js', '.jsx', '.json', '.tsx', '.ts', '.css'],
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),

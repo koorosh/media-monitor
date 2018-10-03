@@ -10,8 +10,11 @@ export const Request = {
       params: params
     })
   },
-  post: (url, body, config) => {
-    return axios.post(url, body, config)
+  post: (url, data, config) => {
+    return axios.post(url, data, config)
+  },
+  patch: (url, data, config) => {
+    return axios.patch(url, data, config)
   }
 };
 

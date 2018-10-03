@@ -1,0 +1,21 @@
+{
+  "extends": [],
+  "defaultSeverity": "none",
+  "globals": {
+
+  },
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts"
+    ]
+  },
+  "rules": {
+    "quotemark": ["single"],
+    "trailing-comma": [false],
+    "interface-name": ["never-prefix"],
+    "object-literal-sort-keys": false,
+    "no-submodule-imports": [false],
+    "no-unused-variable": false
+  }
+}

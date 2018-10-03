@@ -1,12 +1,3 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import {Auth} from "./core/auth";
-import {configureAxios} from "./core/request";
-import {App} from './App';
-
-const root = document.getElementById('root');
-
 if (!window.chrome.identity) {
   const callbacks = [];
   let isSignedIn = false;
@@ -25,7 +16,7 @@ if (!window.chrome.identity) {
         callbacks.push(callback);
       }
     }
-  }
+  };
 }
 
 if (!window.chrome.storage) {
@@ -44,20 +35,17 @@ if (!window.chrome.storage) {
     }
   };
 
-  window.chrome.storage = {
-    sync: {
-      set,
-      get
-    }
-  }
+  // window.chrome.storage = {
+  //   sync: {
+  //     set,
+  //     get,
+  //     clear: () => {/**/}
+  //   }
+  // };
 }
 
 if (!window.chrome.runtime) {
-  window.chrome.runtime = { lastError: null }
+  window.chrome.runtime = { lastError: null };
 }
 
-//Auth.getToken((token) => {
-  //let toket = "ya29.Glv4BRBohzRMxlLEA5BDrAS4SLu8jkNDeo4SkFj7hd1-mI5_OMgji9DgruX2a5u8YtsRkBJG3lLfn8ALTqxyxdte8cX0bSzN4s8F-pvEugoqrA4868zWUOHTJC6r"
-  //configureAxios(token);
-  ReactDOM.render(<App/>, root);
-//});
+export default window.chrome

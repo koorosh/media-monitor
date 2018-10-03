@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import './App.css';
-import {MainForm} from "./components/main-form/main-form";
-import {Storage} from "./core/storage";
-import {Auth} from "./core/auth";
-import {configureAxios} from "./core/request";
+/*
+import * as React from 'react'
+import { find } from 'lodash'
+import './App.css'
+import {MainForm} from "./components/main-form/main-form"
+import {Storage} from "./core/storage"
+import {Auth} from "./core/auth"
+import {configureAxios} from "./core/request"
 
-export class App extends Component {
-
+export class App extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,7 +39,7 @@ export class App extends Component {
     });
 
     Storage.getData(projects => {
-      const activeProject = Object.values(projects).find((project) => project.isActive);
+      const activeProject = find(projects, (value: any, projectName: string) => value.isActive)
 
       if(activeProject) {
         self.setState({
@@ -47,6 +48,7 @@ export class App extends Component {
       }
     })
   }
+
   render() {
     return (
       <div className="container-fluid">
@@ -57,3 +59,4 @@ export class App extends Component {
     );
   }
 }
+*/

@@ -1,0 +1,8 @@
+const message = {
+  send: () => {
+
+  },
+  subscribe: () => {
+
+  }
+}
