@@ -7,7 +7,7 @@ let retryCount = 0
 const Authenticate = {
   getToken: () => {
     return new Promise(((resolve, reject) => {
-      if(isChromePluginContext()) {
+      if(!isChromePluginContext()) {
         reject('Application runs out of Chrome Plugin context. Cannot authentificate.')
       }
 

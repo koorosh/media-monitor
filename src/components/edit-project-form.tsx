@@ -16,7 +16,7 @@ import CardActions from "@material-ui/core/CardActions"
 import CardContent from "@material-ui/core/CardContent"
 
 import EditCategoryForm from "./edit-category-form"
-import { Category, Project } from '../containers/Options'
+import { Category, Project } from '../models'
 
 const styles = theme => ({
   addCategoryDialog: {
@@ -49,21 +49,11 @@ class EditProjectForm extends React.Component<
   constructor(props: EditProjectFormProps) {
     super(props)
     const projectName = "some name"
-    const categories: Category[] = [
-      {
-        id: new Date().getTime(),
-        name: "one cat",
-        options: [
-          { id: 1, name: "opt1" },
-          { id: 2, name: "opt2" },
-          { id: 3, name: "opt3" }
-        ]
-      }
-    ]
+    const categories: Category[] = []
 
     this.state = {
       isNewCategoryModalOpen: false,
-      project: _.cloneDeep(props.initProject)
+      project: _.cloneDeep(props.initProject || new Project())
     }
   }
 
@@ -98,7 +88,7 @@ class EditProjectForm extends React.Component<
     this.props.onClose()
   }
 
-  removeCategory = (categoryId: number) => {
+  removeCategory = (categoryId: string) => {
     const categories = this.state.project.categories.filter(
       category => category.id !== categoryId
     )

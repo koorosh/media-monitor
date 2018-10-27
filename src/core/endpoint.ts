@@ -9,7 +9,6 @@ const endpoints = {
 
 export const Endpoint = {
   createSpreadsheet: (title) => {
-
     const body = {
       properties: {
         title: title
@@ -25,9 +24,11 @@ export const Endpoint = {
 
     return Request.post(endpoints.spreadsheet, body, config);
   },
-  appendRow: (data, spreadsheetId, range='A1') => {
+  appendRow: (data: string[][], spreadsheetId: string, range: string = 'A1') => {
+    // TODO: specify A1:E1 to exactly insert row with 6 columns. it will fix random insertion of rows
     const body = {
-      values: data
+      values: data,
+      majorDimension: 'ROWS'
     };
 
     const config = {

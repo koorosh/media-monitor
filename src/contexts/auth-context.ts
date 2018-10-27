@@ -1,11 +1,19 @@
+import { computed, observable } from 'mobx'
+import { Auth } from '../core/auth'
 
 class AuthContext {
 
-  isLoggedIn: boolean
+  constructor() {
+    this.authentificate()
+  }
 
-  authentificate(): Promise<boolean> {
-    return Promise.resolve(false)
+  @observable isLoggedIn: boolean
+
+  authentificate(): void {
+    Auth.getToken((token: string) => {
+      this.isLoggedIn = !!token
+    })
   }
 }
 
-export default AuthContext
+export default new AuthContext()

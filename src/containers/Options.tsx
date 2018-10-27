@@ -1,7 +1,8 @@
 import * as React from "react"
-import { findIndex } from 'lodash'
+import { observer } from 'mobx-react'
 import { withStyles } from "@material-ui/core/styles"
 import Card from "@material-ui/core/Card"
+import CssBaseline from '@material-ui/core/CssBaseline'
 import CardActions from "@material-ui/core/CardActions"
 import CardContent from "@material-ui/core/CardContent"
 import Button from "@material-ui/core/Button"
@@ -10,31 +11,8 @@ import AddIcon from "@material-ui/icons/Add"
 
 import EditProjectForm from "./../components/edit-project-form"
 import ProjectsList from "./../components/projects-list"
-
-export class Item {
-  constructor() {
-    this.id = new Date().getTime()
-  }
-  id: number
-}
-
-export class Option extends Item {
-  constructor(public name: string) {
-    super()
-  }
-}
-
-export class Category extends Item {
-  constructor(public name: string, public options: Option[] = []) {
-    super()
-  }
-}
-
-export class Project extends Item {
-  constructor(public name: string = 'New Project', public categories: Category[] = []) {
-    super()
-  }
-}
+import { Project } from '../models'
+import ProjectContext from '../contexts/project-context'
 
 enum OptionsMode {
   VIEW,
@@ -66,146 +44,110 @@ const styles = (theme: any) => ({
 })
 
 interface OptionsState {
-  projects: Project[]
+  //projects: Project[]
   mode: OptionsMode
   editProject: Project
 }
 
+@observer
 class Options extends React.Component<any, OptionsState> {
-  state = {
-    projects: [
-      {
-        id: 1,
-        name: "Моніторинг",
-        categories: [
-          {
-            id: 1,
-            name: "Гендер",
-            options: [
-              { id: 1, name: "Чол" },
-              { id: 2, name: "Жін" },
-              { id: 3, name: "Сер" }
-            ]
-          },
-          {
-            id: 2,
-            name: "Посада",
-            options: [
-              { id: 1, name: "Політика" },
-              { id: 2, name: "Суддя" },
-              { id: 3, name: "Водій" }
-            ]
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: "Моніторинг 2",
-        categories: [
-          {
-            id: 1,
-            name: "Гендер",
-            options: [
-              { id: 1, name: "Чол" },
-              { id: 2, name: "Жін" },
-              { id: 3, name: "Сер" }
-            ]
-          },
-          {
-            id: 2,
-            name: "Посада",
-            options: [
-              { id: 1, name: "Політика" },
-              { id: 2, name: "Суддя" },
-              { id: 3, name: "Водій" }
-            ]
-          }
-        ]
-      }
-    ],
-    mode: OptionsMode.VIEW,
-    editProject: new Project("")
+  constructor(props: any) {
+    super(props)
+
+    this.state = {
+      mode: OptionsMode.VIEW,
+      editProject: undefined
+    }
   }
 
   onAddProjectClick = () => {
     this.setState({
-      mode: OptionsMode.EDIT
+      mode: OptionsMode.EDIT,
+      editProject: undefined
     })
   }
 
   onNewProjectSubmit = (project: Project, isNew: boolean) => {
-    const { projects } = this.state
     if (isNew) {
-      this.setState({
-        projects: [...projects, project],
-        mode: OptionsMode.VIEW
-      })
-    } else {
-      findIndex(projects, p => p.id === project.id)
+      ProjectContext.saveProject(project)
+        .then(() => {
+          this.setState({
+            mode: OptionsMode.VIEW
+          })
+        })
+    }
+    else {
+      ProjectContext.updateProject(project)
+        .then(() => {
+          this.setState({
+            mode: OptionsMode.VIEW
+          })
+        })
     }
   }
 
   onNewProjectFormClose = () => {
     this.setState({
       mode: OptionsMode.VIEW,
-      editProject: new Project("")
+      editProject: undefined
     })
   }
 
-  onProjectRemove = (projectId: number) => {
-    const projects = this.state.projects.filter(
-      project => project.id !== projectId
-    )
-    this.setState({
-      projects
-    })
+  onProjectRemove = (projectId: string) => {
+    const project = ProjectContext.projects.find(p => p.id === projectId)
+    ProjectContext.removeProject(project)
   }
 
-  onProjectEdit = (projectId: number) => {
+  onProjectEdit = (projectId: string) => {
     this.setState({
       mode: OptionsMode.EDIT,
-      editProject:
-        this.state.projects.find(project => project.id === projectId) ||
-        new Project("")
+      editProject: ProjectContext.projects.find(project => project.id === projectId)
     })
   }
 
   render() {
     const { classes } = this.props
-    const { mode, projects, editProject } = this.state
+    const { mode, editProject } = this.state
     return (
-      <Card className={classes.card}>
-        {mode === OptionsMode.VIEW && (
-          <React.Fragment>
-            <CardContent>
-              <ProjectsList
-                items={projects}
-                onEdit={projectId => this.onProjectEdit(projectId)}
-                onRemove={projectId => this.onProjectRemove(projectId)}
+      <React.Fragment>
+        <CssBaseline />
+        <Card className={classes.card}>
+          {
+            mode === OptionsMode.VIEW && (
+              <React.Fragment>
+                <CardContent>
+                  <ProjectsList
+                    items={ProjectContext.projects}
+                    onEdit={projectId => this.onProjectEdit(projectId)}
+                    onRemove={projectId => this.onProjectRemove(projectId)}
+                  />
+                </CardContent>
+                <CardActions>
+                  <Button
+                    onClick={this.onAddProjectClick}
+                    variant="fab"
+                    mini
+                    color="primary"
+                    aria-label="Add"
+                    className={classes.button}
+                  >
+                    <AddIcon />
+                  </Button>
+                </CardActions>
+              </React.Fragment>
+            )
+          }
+          {
+            mode === OptionsMode.EDIT && (
+              <EditProjectForm
+                initProject={editProject}
+                onSubmit={(project: Project) => this.onNewProjectSubmit(project, !editProject)}
+                onClose={() => this.onNewProjectFormClose()}
               />
-            </CardContent>
-            <CardActions>
-              <Button
-                onClick={this.onAddProjectClick}
-                variant="fab"
-                mini
-                color="primary"
-                aria-label="Add"
-                className={classes.button}
-              >
-                <AddIcon />
-              </Button>
-            </CardActions>
-          </React.Fragment>
-        )}
-        {mode === OptionsMode.EDIT && (
-          <EditProjectForm
-            initProject={editProject}
-            onSubmit={(project: Project) => this.onNewProjectSubmit(project, false)}
-            onClose={() => this.onNewProjectFormClose()}
-          />
-        )}
-      </Card>
+            )
+          }
+        </Card>
+      </React.Fragment>
     )
   }
 }

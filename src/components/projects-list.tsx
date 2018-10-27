@@ -7,8 +7,7 @@ import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
 import ListItemText from "@material-ui/core/ListItemText"
-
-import { Project } from '../containers/Options'
+import { Project } from '../models'
 
 const styles = theme => ({
   addCategoryDialog: {
@@ -27,11 +26,16 @@ const styles = theme => ({
 export interface ProjectsListProps {
   items: any[]
   classes: any
-  onRemove: (projectId: number) => void
-  onEdit: (projectId: number) => void
+  onRemove: (projectId: string) => void
+  onEdit: (projectId: string) => void
 }
 
 class ProjectsList extends React.Component<ProjectsListProps, any> {
+
+  static defaultProps = {
+    items: []
+  }
+
   render() {
     const { classes, items, onRemove, onEdit } = this.props
 
@@ -40,7 +44,10 @@ class ProjectsList extends React.Component<ProjectsListProps, any> {
         <ListItem key={index}>
           <ListItemText primary={project.name} />
           <ListItemSecondaryAction>
-            <IconButton aria-label="Edit" onClick={() => onEdit(project.id)}>
+            <IconButton
+              aria-label="Edit"
+              onClick={() => onEdit(project.id)}
+            >
               <EditIcon />
             </IconButton>
             <IconButton
