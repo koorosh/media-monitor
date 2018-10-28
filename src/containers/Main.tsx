@@ -37,8 +37,6 @@ const styles = (theme: any) => ({
 
 interface MainState {
   selectedOptions: SaveRecord[]
-  isLoggedIn: boolean
-  project: Project
 }
 
 @observer
@@ -47,41 +45,8 @@ class Main extends React.Component<any, MainState> {
     super(props)
 
     this.state = {
-      selectedOptions: [],
-      isLoggedIn: false,
-      project: undefined
+      selectedOptions: []
     };
-  }
-
-  componentDidMount() {
-    const self = this;
-
-    Authenticate.onSignInChanged()
-      .then((isLoggedIn: boolean) => {
-        this.setState({
-          isLoggedIn
-        });
-      });
-
-    Authenticate.getToken()
-      .then((token: string) => {
-        this.setState({
-          isLoggedIn: !!token
-        })
-
-        configureAxios(token);
-      });
-
-    // Storage.getData()
-    //   .then(projects => {
-    //     const activeProject = find(projects, (value: any, projectName: string) => value.isActive)
-    //
-    //     if(activeProject) {
-    //       self.setState({
-    //         project: activeProject
-    //       })
-    //     }
-    //   })
   }
 
   handleOptionChange = (category: Category, selectedOptions: Option[]) => {
@@ -98,13 +63,24 @@ class Main extends React.Component<any, MainState> {
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes } = this.props
+    const project = ProjectContext.activeProject
+
+    if (!project) {
+      return (
+        <div>
+          You don't have active project. Create new one!
+        </div>
+      )
+    }
 
     return (
       <Card className={classes.card}>
         <CardHeader
           avatar={
-            <Avatar aria-label="Project" className={classes.avatar}>
+            <Avatar
+              aria-label="Project"
+              className={classes.avatar}>
               M
             </Avatar>
           }
@@ -117,7 +93,7 @@ class Main extends React.Component<any, MainState> {
         />
         <Divider />
         {
-          ProjectContext.activeProject.categories.map((category: Category) =>
+          project.categories.map((category: Category) =>
             <React.Fragment>
               <ProjectOptionCard
                 name={category.name}

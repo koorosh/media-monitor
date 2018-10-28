@@ -1,13 +1,13 @@
 import { forOwn, omit } from 'lodash'
 import { isChromePluginContext } from './helpers'
-import { ProjectRecord } from '../../models'
+import { Project } from '../../models'
 
 export interface StorageData {
-  [key: string]: ProjectRecord
+  [key: string]: Project
 }
 
 const storage = {
-  updateItemByKey: (key: string, data: any): Promise<any> => {
+  updateItemByKey: (key: string, data: Project): Promise<any> => {
     return new Promise((resolve, reject) => {
       if (!isChromePluginContext()) {
         reject('Application runs out of Chrome Plugin context. Cannot authentificate.')
@@ -18,7 +18,7 @@ const storage = {
       window.chrome.storage.local.set(items, () => resolve());
     })
   },
-  updateAll: (data) => {
+  updateAll: (data: StorageData): Promise<any> => {
     return new Promise((resolve, reject) => {
       if (!isChromePluginContext()) {
         reject('Application runs out of Chrome Plugin context. Cannot authentificate.')
@@ -26,18 +26,18 @@ const storage = {
       window.chrome.storage.local.set(data, () => resolve());
     })
   },
-  setActiveStatus: (spreadsheetId: string, status=true) => {
-    return this.getData()
-      .then(items => {
-        if (items[spreadsheetId] && items[spreadsheetId].isActive === status) {
+  setActiveStatus: (projectId: string, status=true) => {
+    return storage.getData()
+      .then((items: StorageData) => {
+        if (items[projectId] && items[projectId].isActive === status) {
           return Promise.resolve();
         }
 
         forOwn(items, (value, key) => {
-          items[key].isActive = items[key].spreadsheetId === spreadsheetId
+          items[key].isActive = items[key].id === projectId
         })
 
-        return this.updateAll(items)
+        return storage.updateAll(items)
       })
       .then(() => true)
   },

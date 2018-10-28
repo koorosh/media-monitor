@@ -3,10 +3,9 @@ import {Request} from "./request";
 const API_KEY = 'AIzaSyCh4KU1aTpx9fl2TRVjxtn8aM3o1n_xFYs';
 
 const endpoints = {
-  driveFiles: `https://www.googleapis.com/upload/drive/v3/files`,
+  driveFiles: `https://www.googleapis.com/drive/v3/files`,
   listFiles: `https://content.googleapis.com/drive/v3/files`,
-  updateFile: `https://content.googleapis.com/drive/v3/files`,
-  getValuesAppendUrl: (spreadsheetId, range) => `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}:append`
+  updateFile: `https://www.googleapis.com/drive/v3/files`
 };
 
 export class GoogleDrive {
@@ -26,7 +25,7 @@ export class GoogleDrive {
     };
 
     return Request.post(endpoints.driveFiles, body, config)
-      .then((resp: any) => resp.id);
+      .then((data: any) => data.id);
   }
 
   static moveFile(fileId, targetDirId, currentParentId='root') {
@@ -45,16 +44,26 @@ export class GoogleDrive {
     const config = {
       params: {
         key: API_KEY,
-        q: `name = "${dirName}" and trashed = false`,
         fields: 'files/id'
-      }
+      },
+      q: `name = "${dirName}" and trashed = false and mimeType = "application/vnd.google-apps.folder"`
     };
 
     return Request.get(endpoints.listFiles, config)
+      .then((data: any) => {
+        return data.files
+      })
   }
 
-  static existsDir(dirName) {
+  static existsDir(dirName): Promise<string> {
     return GoogleDrive.listDirs(dirName)
-      .then((response: any) => response.files && response.files.length > 0)
+      .then((files: any) => {
+        if (files && files.length > 0) {
+          return files[0].id
+        }
+        else {
+          return undefined
+        }
+      })
   }
 }

@@ -69,7 +69,7 @@ class Options extends React.Component<any, OptionsState> {
 
   onNewProjectSubmit = (project: Project, isNew: boolean) => {
     if (isNew) {
-      ProjectContext.saveProject(project)
+      ProjectContext.createProject(project)
         .then(() => {
           this.setState({
             mode: OptionsMode.VIEW

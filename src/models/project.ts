@@ -3,6 +3,10 @@ import { Item } from './item'
 import { ProjectRecord } from './project-record'
 
 export class Project extends Item {
+  parentDirId: string
+  spreadsheetId: string
+  sheetId: string
+
   constructor(
     public name: string = 'New Project',
     public categories: Category[] = [],

@@ -1,5 +1,6 @@
 import { computed, observable } from 'mobx'
 import { Auth } from '../core/auth'
+import { configureAxios } from '../core/request'
 
 class AuthContext {
 
@@ -12,6 +13,9 @@ class AuthContext {
   authentificate(): void {
     Auth.getToken((token: string) => {
       this.isLoggedIn = !!token
+      if (!!token) {
+        configureAxios(token);
+      }
     })
   }
 }
