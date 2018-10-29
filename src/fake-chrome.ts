@@ -34,18 +34,18 @@ if (!window.chrome.storage) {
       callback(storage);
     }
   };
-
-  // window.chrome.storage = {
-  //   sync: {
-  //     set,
-  //     get,
-  //     clear: () => {/**/}
-  //   }
-  // };
 }
 
 if (!window.chrome.runtime) {
   window.chrome.runtime = { lastError: null };
+}
+
+if (!window.chrome.tabs) {
+  window.chrome.tabs = {
+    id: 'qwerty',
+    title: 'Tab title',
+    url: 'www.tab-url.com/qwerty'
+  };
 }
 
 export default window.chrome

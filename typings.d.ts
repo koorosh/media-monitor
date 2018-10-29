@@ -1,6 +1,6 @@
 interface Window {
   chrome?: {
-    identity: any;
+    identity: any
     storage: {
       sync: {
         get: any;
@@ -11,11 +11,12 @@ interface Window {
         get: any;
         clear: any;
       };
-    };
+    }
     runtime: {
       lastError?: any
-    };
+    }
+    tabs: any
   };
 }
 
-declare var module: any;
+declare var module: any

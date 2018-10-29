@@ -11,7 +11,8 @@ export const Endpoint = {
   createSpreadsheet: (title) => {
     const body = {
       properties: {
-        title: title
+        title: title,
+        locale: 'uk_UA'
       }
     };
 

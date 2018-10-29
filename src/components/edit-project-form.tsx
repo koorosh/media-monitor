@@ -14,11 +14,12 @@ import Avatar from "@material-ui/core/Avatar"
 import FolderIcon from "@material-ui/icons/Folder"
 import CardActions from "@material-ui/core/CardActions"
 import CardContent from "@material-ui/core/CardContent"
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 import EditCategoryForm from "./edit-category-form"
 import { Category, Project } from '../models'
 
-const styles = theme => ({
+const styles: any = theme => ({
   addCategoryDialog: {
     root: {
       minWidth: 300,
@@ -27,6 +28,9 @@ const styles = theme => ({
   },
   button: {
     marginLeft: "auto"
+  },
+  circularProgress: {
+    position: "absolute"
   }
 })
 
@@ -35,6 +39,7 @@ interface EditProjectFormProps {
   onSubmit: (project: Project) => void
   onClose: () => void
   classes: any
+  isLoading: boolean
 }
 
 interface EditProjectFormState {
@@ -98,7 +103,7 @@ class EditProjectForm extends React.Component<
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, isLoading } = this.props
     const { project, isNewCategoryModalOpen } = this.state
 
     const Categories = project.categories.map((category, index) => (
@@ -129,11 +134,12 @@ class EditProjectForm extends React.Component<
           <div>
             <TextField
               id="name"
-              label="Назва проету"
+              label="Назва проекту"
               value={project.name}
               onChange={e => this.handleProjectNameChange(e.target.value)}
               margin="dense"
               fullWidth
+              disabled={isLoading}
             />
             <br />
 
@@ -143,6 +149,7 @@ class EditProjectForm extends React.Component<
                 size="small"
                 color="primary"
                 onClick={this.handleOpenNewCategoryModal}
+                disabled={isLoading}
               >
                 Додати категорію
               </Button>
@@ -156,9 +163,20 @@ class EditProjectForm extends React.Component<
           </div>
         </CardContent>
         <CardActions>
-          <Button onClick={() => this.closeEditForm()}>Відмінити</Button>
-          <Button onClick={() => this.handleSave()} color="primary">
-            Зберегти
+          <Button
+            onClick={() => this.closeEditForm()}>
+            Відмінити
+          </Button>
+          <Button
+            onClick={() => this.handleSave()}
+            disabled={isLoading}
+            color="primary">
+            <span>
+              { isLoading ? 'Збереження...' : 'Зберегти' }
+            </span>
+            {
+              isLoading && <CircularProgress className={classes.circularProgress} size={24} />
+            }
           </Button>
         </CardActions>
       </React.Fragment>

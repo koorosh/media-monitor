@@ -1,5 +1,5 @@
 import { computed, observable } from 'mobx'
-import { Project } from '../models'
+import { Category, Project } from '../models'
 import storage, { StorageData } from '../core/chrome-plugin-api/storage'
 import { GoogleDrive } from '../core/google-drive'
 import config from '../config'
@@ -25,7 +25,7 @@ class ProjectContext {
   }
 
   createProject(project: Project): Promise<boolean> {
-
+    project.categories = Category.applySortIndex(project.categories)
     return GoogleDrive.existsDir(config.projectDirName)
       .then((existingDirId: string) => {
         if (!existingDirId) {
@@ -64,6 +64,7 @@ class ProjectContext {
   }
 
   updateProject(project: Project): Promise<any> {
+    project.categories = Category.applySortIndex(project.categories)
     return storage.updateItemByKey(project.id, project)
       .then(() => {
         const projectPosition = this.projects.findIndex(p => p.id === project.id)

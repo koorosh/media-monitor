@@ -1,6 +1,7 @@
+import { create } from 'lodash'
+
 import { Category } from './category'
 import { Item } from './item'
-import { ProjectRecord } from './project-record'
 
 export class Project extends Item {
   parentDirId: string
@@ -14,10 +15,7 @@ export class Project extends Item {
     super()
   }
 
-  static fromSheetRecord(record: ProjectRecord) {
-    const project = new Project(record.name, record.categories)
-    project.id = record.id
-    project.isActive = record.isActive
-    return project
+  static fromSheetRecord(record: any) {
+    return create(new Project(record.name, record.categories), record)
   }
 }

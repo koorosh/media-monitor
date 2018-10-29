@@ -21,8 +21,10 @@ export interface ProjectOptionCardState {
 
 const styles = () => ({
   checkbox: {
-    width: 36,
-    height: 36
+    width: 24,
+    height: 24,
+    paddingTop: 2,
+    paddingBottom: 2
   }
 });
 
@@ -40,17 +42,18 @@ class ProjectOptionCard extends React.Component<ProjectOptionCardProps, ProjectO
 
   handleChange = (option: Option) => {
     const { optionsState } = this.state
+    const newOptionState: any = {
+      ...optionsState,
+      [option.id]: [!(optionsState[option.id][0]), option]
+    }
     this.setState({
-      optionsState: {
-        ...optionsState,
-        [option.id]: [!(optionsState[option.id][0]), option]
-      }
+      optionsState: newOptionState
     })
-    const selectedOptions: Option[] = this.getSelectedOptions()
+    const selectedOptions: Option[] = this.getSelectedOptions(newOptionState)
     this.props.onSelectedChange(selectedOptions)
   }
 
-  getSelectedOptions = () => _.chain(this.state.optionsState)
+  getSelectedOptions = (optionsState) => _.chain(optionsState)
     .filter((v: [boolean, Option]) => v[0])
     .map((v: [boolean, Option]) => v[1])
     .value()

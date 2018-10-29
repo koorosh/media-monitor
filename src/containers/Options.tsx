@@ -13,6 +13,7 @@ import EditProjectForm from "./../components/edit-project-form"
 import ProjectsList from "./../components/projects-list"
 import { Project } from '../models'
 import ProjectContext from '../contexts/project-context'
+import ConfirmationDialog from '../components/confirmation-dialog'
 
 enum OptionsMode {
   VIEW,
@@ -44,9 +45,11 @@ const styles = (theme: any) => ({
 })
 
 interface OptionsState {
-  //projects: Project[]
+  isLoading: boolean
+  isOpenConfirmationDialog: boolean
   mode: OptionsMode
   editProject: Project
+  projectIdToRemove: string
 }
 
 @observer
@@ -55,8 +58,11 @@ class Options extends React.Component<any, OptionsState> {
     super(props)
 
     this.state = {
+      isOpenConfirmationDialog: false,
+      isLoading: false,
       mode: OptionsMode.VIEW,
-      editProject: undefined
+      editProject: undefined,
+      projectIdToRemove: undefined
     }
   }
 
@@ -68,21 +74,29 @@ class Options extends React.Component<any, OptionsState> {
   }
 
   onNewProjectSubmit = (project: Project, isNew: boolean) => {
+    this.setState({
+      isLoading: true
+    })
+
+    const onSubmitted = () => {
+      this.setState({
+        mode: OptionsMode.VIEW,
+        isLoading: false
+      })
+    }
+
+    const onSubmittionFailed = (error: Error) => {
+      onSubmitted()
+      console.error(error)
+    }
+
     if (isNew) {
       ProjectContext.createProject(project)
-        .then(() => {
-          this.setState({
-            mode: OptionsMode.VIEW
-          })
-        })
+        .then(onSubmitted, onSubmittionFailed)
     }
     else {
       ProjectContext.updateProject(project)
-        .then(() => {
-          this.setState({
-            mode: OptionsMode.VIEW
-          })
-        })
+        .then(onSubmitted, onSubmittionFailed)
     }
   }
 
@@ -94,8 +108,27 @@ class Options extends React.Component<any, OptionsState> {
   }
 
   onProjectRemove = (projectId: string) => {
-    const project = ProjectContext.projects.find(p => p.id === projectId)
+    this.setState({
+      projectIdToRemove: projectId,
+      isOpenConfirmationDialog: true
+    })
+  }
+
+  onProjectRemoveConfirmed() {
+    if (!this.state.projectIdToRemove) return
+    const project = ProjectContext.projects.find(p => p.id === this.state.projectIdToRemove)
     ProjectContext.removeProject(project)
+    this.setState({
+      projectIdToRemove: undefined,
+      isOpenConfirmationDialog: false
+    })
+  }
+
+  onProjectRemoveCancelled() {
+    this.setState({
+      projectIdToRemove: undefined,
+      isOpenConfirmationDialog: false
+    })
   }
 
   onProjectEdit = (projectId: string) => {
@@ -107,10 +140,17 @@ class Options extends React.Component<any, OptionsState> {
 
   render() {
     const { classes } = this.props
-    const { mode, editProject } = this.state
+    const { mode, editProject, isLoading, isOpenConfirmationDialog } = this.state
     return (
       <React.Fragment>
         <CssBaseline />
+        <ConfirmationDialog
+          open={isOpenConfirmationDialog}
+          message={'Ви дійсно хочете видалити проект?'}
+          title={'Підтведження'}
+          onSubmit={() => this.onProjectRemoveConfirmed()}
+          onCancel={() => this.onProjectRemoveCancelled()}
+        />
         <Card className={classes.card}>
           {
             mode === OptionsMode.VIEW && (
@@ -140,6 +180,7 @@ class Options extends React.Component<any, OptionsState> {
           {
             mode === OptionsMode.EDIT && (
               <EditProjectForm
+                isLoading={isLoading}
                 initProject={editProject}
                 onSubmit={(project: Project) => this.onNewProjectSubmit(project, !editProject)}
                 onClose={() => this.onNewProjectFormClose()}
