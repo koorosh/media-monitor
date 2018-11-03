@@ -78,6 +78,11 @@ class ProjectContext {
         this.projects = this.projects.filter(p => p.id !== project.id)
       })
   }
+
+  setActiveProject(projecId: string) {
+    return storage.setActiveStatus(projecId)
+      .then(() => this.queryProjects())
+  }
 }
 
 export default new ProjectContext()

@@ -1,12 +1,16 @@
 import * as React from "react"
 import { withStyles } from "@material-ui/core/styles"
 import EditIcon from "@material-ui/icons/Edit"
+import CheckCircle from "@material-ui/icons/CheckCircle"
+import Add from "@material-ui/icons/Add"
 import DeleteIcon from "@material-ui/icons/Delete"
 import IconButton from "@material-ui/core/IconButton"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction"
 import ListItemText from "@material-ui/core/ListItemText"
+import Tooltip from '@material-ui/core/Tooltip'
+
 import { Project } from '../models'
 
 const styles = theme => ({
@@ -28,6 +32,7 @@ export interface ProjectsListProps {
   classes: any
   onRemove: (projectId: string) => void
   onEdit: (projectId: string) => void
+  onSetActive: (projectId: string) => void
 }
 
 class ProjectsList extends React.Component<ProjectsListProps, any> {
@@ -37,13 +42,33 @@ class ProjectsList extends React.Component<ProjectsListProps, any> {
   }
 
   render() {
-    const { classes, items, onRemove, onEdit } = this.props
+    const { classes, items, onRemove, onEdit, onSetActive } = this.props
 
     const Projects = items.map((project: Project, index) => {
       return (
         <ListItem key={index}>
           <ListItemText primary={project.name} />
           <ListItemSecondaryAction>
+            {
+              !project.isActive &&
+              <Tooltip title="Встановити активним">
+                <IconButton
+                  aria-label="Set Active"
+                  onClick={() => onSetActive(project.id)}
+                >
+                  <Add />
+                </IconButton>
+              </Tooltip>
+            }
+            {
+              project.isActive &&
+              <Tooltip title="Активний">
+                <IconButton>
+                  <CheckCircle />
+                </IconButton>
+              </Tooltip>
+            }
+
             <IconButton
               aria-label="Edit"
               onClick={() => onEdit(project.id)}

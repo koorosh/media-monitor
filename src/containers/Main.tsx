@@ -11,10 +11,12 @@ import IconButton from "@material-ui/core/IconButton"
 import MoreVertIcon from "@material-ui/icons/MoreVert"
 import red from "@material-ui/core/colors/red"
 import Divider from "@material-ui/core/Divider"
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 
 import MainContext, { SaveRecord } from './../contexts/main-context'
 import ProjectContext from './../contexts/project-context'
-import { Category, Option } from '../models'
+import { Category, Option, Project } from '../models'
 import ProjectOptionCard from './../components/project-option-card'
 
 const styles = (theme: any): any => ({
@@ -35,6 +37,7 @@ const styles = (theme: any): any => ({
 
 interface MainState {
   selectedOptions: SaveRecord
+  anchorProjectsMenuEl: any
 }
 
 @observer
@@ -43,6 +46,7 @@ class Main extends React.Component<any, MainState> {
     super(props)
 
     this.state = {
+      anchorProjectsMenuEl: null,
       selectedOptions: {}
     }
   }
@@ -65,8 +69,23 @@ class Main extends React.Component<any, MainState> {
     window.close()
   }
 
+  handleClick = event => {
+    this.setState({ anchorProjectsMenuEl: event.currentTarget });
+  };
+
+  handleProjectSelect(project: Project) {
+    ProjectContext.setActiveProject(project.id)
+      .then(() => {
+        this.setState({
+          anchorProjectsMenuEl: null
+        })
+      })
+  }
+
+
   render() {
     const { classes } = this.props
+    const { anchorProjectsMenuEl } = this.state
     const project = ProjectContext.activeProject
 
     if (!project) {
@@ -88,12 +107,28 @@ class Main extends React.Component<any, MainState> {
             </Avatar>
           }
           action={
-            <IconButton>
+            <IconButton onClick={this.handleClick}>
               <MoreVertIcon />
             </IconButton>
           }
           title={project.name}
         />
+        <Menu
+          id="projects-list-menu"
+          anchorEl={anchorProjectsMenuEl}
+          open={Boolean(anchorProjectsMenuEl)}
+        >
+          {
+            ProjectContext.projects
+              .filter(project => !project.isActive)
+              .map(project => (
+                <MenuItem
+                  onClick={() => this.handleProjectSelect(project)}>
+                  {project.name}
+                </MenuItem>
+              ))
+          }
+        </Menu>
         <Divider />
         <div className={classes.options}>
           {

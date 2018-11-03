@@ -138,6 +138,10 @@ class Options extends React.Component<any, OptionsState> {
     })
   }
 
+  onProjectSetActive = (projectId: string) => {
+    ProjectContext.setActiveProject(projectId)
+  }
+
   render() {
     const { classes } = this.props
     const { mode, editProject, isLoading, isOpenConfirmationDialog } = this.state
@@ -160,6 +164,7 @@ class Options extends React.Component<any, OptionsState> {
                     items={ProjectContext.projects}
                     onEdit={projectId => this.onProjectEdit(projectId)}
                     onRemove={projectId => this.onProjectRemove(projectId)}
+                    onSetActive={projectId => this.onProjectSetActive(projectId)}
                   />
                 </CardContent>
                 <CardActions>

@@ -33,11 +33,23 @@ class ProjectOptionCard extends React.Component<ProjectOptionCardProps, ProjectO
     super(props)
 
     this.state = {
-      optionsState: props.options.reduce((acc, option: Option) => ({
-        ...acc,
-        [option.id]: false
-      }), {})
+      optionsState: this.initOptionsState(props.options)
     }
+  }
+
+  componentWillReceiveProps(nextProps: ProjectOptionCardProps) {
+    if (nextProps.options !== this.props.options) {
+      this.setState({
+        optionsState: this.initOptionsState(nextProps.options)
+      })
+    }
+  }
+
+  initOptionsState(options: Option[]) {
+    return options.reduce((acc, option: Option) => ({
+      ...acc,
+      [option.id]: [false, option]
+    }), {})
   }
 
   handleChange = (option: Option) => {
