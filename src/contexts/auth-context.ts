@@ -1,6 +1,6 @@
 import { computed, observable } from 'mobx'
-import { Auth } from '../core/auth'
 import { configureAxios } from '../core/request'
+import Authenticate from '../core/chrome-plugin-api/authentificate'
 
 class AuthContext {
 
@@ -11,12 +11,13 @@ class AuthContext {
   @observable isLoggedIn: boolean
 
   authentificate(): void {
-    Auth.getToken((token: string) => {
-      this.isLoggedIn = !!token
-      if (!!token) {
-        configureAxios(token);
-      }
-    })
+    Authenticate.getToken()
+      .then((token: string) => {
+        this.isLoggedIn = !!token
+        if (!!token) {
+          configureAxios(token);
+        }
+      })
   }
 }
 

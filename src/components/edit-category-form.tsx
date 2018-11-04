@@ -9,15 +9,24 @@ import DialogContent from "@material-ui/core/DialogContent"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import { Category, Option } from '../models'
 
-const styles = theme => ({
+const styles: any = theme => ({
   root: {
-    minWidth: 300,
-    maxWidth: 400
+    height: 480,
+    display: 'flex',
+    flexDirection: 'column'
   },
-  textField: {
-    marginLeft: theme.spacing.unit * 3,
-    marginRight: theme.spacing.unit * 3
-  }
+  content: {
+    flexGrow: 1
+  },
+  chipsContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    padding: theme.spacing.unit / 2,
+  },
+  chip: {
+    margin: theme.spacing.unit / 2,
+  },
 })
 
 interface EditCategoryFormStateProps {
@@ -103,17 +112,17 @@ class EditCategoryForm extends React.Component<
         disableBackdropClick
         open={isOpen}
         onClose={() => this.onClose()}
-        aria-labelledby="form-dialog-title"
+        aria-labelledby="form-dialog-category"
         classes={{
           root: classes.root
         }}
       >
         <DialogTitle id="form-dialog-title">Нова категорія</DialogTitle>
-        <DialogContent>
+        <DialogContent
+          className={classes.content}>
           <TextField
             id="name"
             label="Назва категорії"
-            className={classes.textField}
             value={name}
             onChange={e => this.onNameChange(e.target.value)}
             fullWidth
@@ -122,7 +131,6 @@ class EditCategoryForm extends React.Component<
           <TextField
             id="options"
             label="Варіант"
-            className={classes.textField}
             value={editingOptionName}
             onChange={e => this.onOptionChange(e.target.value)}
             onKeyDown={e => this.onKeyPress(e)}
@@ -130,10 +138,17 @@ class EditCategoryForm extends React.Component<
             fullWidth
             helperText="Натисни Enter щоб додати введений варіант"
           />
-          <br />
-          {options.map((option: Option, index: number) => (
-            <Chip label={option.name} onDelete={() => {}} key={index} />
-          ))}
+          <div className={classes.chipsContainer}>
+          {
+            options.map((option: Option, index: number) => (
+              <Chip
+                className={classes.chip}
+                label={option.name}
+                onDelete={() => {}}
+                key={index} />
+            ))
+          }
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={() => this.onClose()}>Відмінити</Button>

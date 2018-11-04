@@ -31,6 +31,9 @@ const styles: any = theme => ({
   },
   circularProgress: {
     position: "absolute"
+  },
+  content: {
+    flexGrow: 1
   }
 })
 
@@ -130,7 +133,8 @@ class EditProjectForm extends React.Component<
 
     return (
       <React.Fragment>
-        <CardContent>
+        <CardContent
+          className={classes.content}>
           <div>
             <TextField
               id="name"

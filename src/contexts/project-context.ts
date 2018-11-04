@@ -17,8 +17,8 @@ class ProjectContext {
     return this.projects.find(project => project.isActive)
   }
 
-  queryProjects() {
-    storage.getData()
+  queryProjects(): Promise<void> {
+    return storage.getData()
       .then((data: StorageData) => {
         this.projects = Object.values(data).map(Project.fromSheetRecord)
       })
@@ -39,10 +39,11 @@ class ProjectContext {
           categories: project.categories
         }
         return spreadsheet.create(spreadsheetPayload)
-          .then(({ spreadsheetId, sheetId }) => {
+          .then(({ spreadsheetId, sheetId, spreadsheetRange }) => {
             project.spreadsheetId = spreadsheetId
             project.sheetId = sheetId
             project.parentDirId = directoryId
+            project.spreadsheetRange = spreadsheetRange
 
             return GoogleDrive.moveFile(project.spreadsheetId, project.parentDirId)
               .then(() => {
@@ -72,16 +73,21 @@ class ProjectContext {
       })
   }
 
-  removeProject(project: Project) {
-    storage.removeByKey(project.id)
+  removeProject(project: Project): Promise<void> {
+    return storage.removeByKey(project.id)
       .then(() => {
         this.projects = this.projects.filter(p => p.id !== project.id)
+        if (project.isActive && this.projects.length > 0) {
+           this.setActiveProject(this.projects[0].id)
+        }
       })
   }
 
-  setActiveProject(projecId: string) {
+  setActiveProject(projecId: string): Promise<void> {
     return storage.setActiveStatus(projecId)
-      .then(() => this.queryProjects())
+      .then(() => {
+        this.queryProjects()
+      })
   }
 }
 

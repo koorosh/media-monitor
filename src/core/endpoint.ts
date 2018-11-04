@@ -1,6 +1,6 @@
 import {Request} from "./request";
 
-const API_KEY = 'AIzaSyCh4KU1aTpx9fl2TRVjxtn8aM3o1n_xFYs';
+const API_KEY = process.env.GOOGLE_API_KEY;
 
 const endpoints = {
   spreadsheet: 'https://sheets.googleapis.com/v4/spreadsheets',
@@ -25,7 +25,7 @@ export const Endpoint = {
 
     return Request.post(endpoints.spreadsheet, body, config);
   },
-  appendRow: (data: string[][], spreadsheetId: string, range: string = 'A1') => {
+  appendRow: (data: string[][], spreadsheetId: string, range: string = 'A1', returnFields: string = '') => {
     // TODO: specify A1:E1 to exactly insert row with 6 columns. it will fix random insertion of rows
     const body = {
       values: data,
@@ -34,9 +34,10 @@ export const Endpoint = {
 
     const config = {
       params: {
+        range,
+        includeValuesInResponse: 'false',
         key: API_KEY,
         valueInputOption: 'USER_ENTERED',
-        includeValuesInResponse: 'false',
         insertDataOption: 'INSERT_ROWS',
         alt: 'json'
       }

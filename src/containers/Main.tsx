@@ -18,8 +18,9 @@ import MainContext, { SaveRecord } from './../contexts/main-context'
 import ProjectContext from './../contexts/project-context'
 import { Category, Option, Project } from '../models'
 import ProjectOptionCard from './../components/project-option-card'
+import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress'
 
-const styles = (theme: any): any => ({
+const styles: any = (theme: any): any => ({
   card: {
     boxShadow: 'none'
   },
@@ -32,12 +33,16 @@ const styles = (theme: any): any => ({
   options: {
     maxHeight: 400,
     overflowY: 'auto'
-  }
+  },
+  circularProgress: {
+    position: "absolute"
+  },
 })
 
 interface MainState {
   selectedOptions: SaveRecord
   anchorProjectsMenuEl: any
+  isLoading: boolean
 }
 
 @observer
@@ -47,7 +52,8 @@ class Main extends React.Component<any, MainState> {
 
     this.state = {
       anchorProjectsMenuEl: null,
-      selectedOptions: {}
+      selectedOptions: {},
+      isLoading: false
     }
   }
 
@@ -61,8 +67,16 @@ class Main extends React.Component<any, MainState> {
   }
 
   handleOnSave() {
+    this.setState({
+      isLoading: true
+    })
     MainContext.saveRecord(this.state.selectedOptions)
-      .then(() => this.closePopup())
+      .then(() => {
+        this.setState({
+          isLoading: false
+        })
+        this.closePopup()
+      })
   }
 
   closePopup() {
@@ -85,7 +99,7 @@ class Main extends React.Component<any, MainState> {
 
   render() {
     const { classes } = this.props
-    const { anchorProjectsMenuEl } = this.state
+    const { anchorProjectsMenuEl, isLoading } = this.state
     const project = ProjectContext.activeProject
 
     if (!project) {
@@ -153,7 +167,15 @@ class Main extends React.Component<any, MainState> {
           <Button
             variant='contained'
             color='primary'
-            onClick={() => this.handleOnSave}>Зберегти</Button>
+            disabled={isLoading}
+            onClick={() => this.handleOnSave()}>
+            <span>
+              { isLoading ? 'Збереження...' : 'Зберегти' }
+            </span>
+            {
+              isLoading && <CircularProgress className={classes.circularProgress} size={24} />
+            }
+          </Button>
         </CardActions>
       </Card>
     )

@@ -1,6 +1,8 @@
+import * as uuidv4 from 'uuid/v4'
+
 export class Item {
   constructor() {
-    this.id = new Date().getTime().toString()
+    this.id = uuidv4()
   }
   id: string
 }

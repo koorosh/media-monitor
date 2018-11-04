@@ -69,12 +69,12 @@ class ProjectsList extends React.Component<ProjectsListProps, any> {
               </Tooltip>
             }
 
-            <IconButton
-              aria-label="Edit"
-              onClick={() => onEdit(project.id)}
-            >
-              <EditIcon />
-            </IconButton>
+            {/*<IconButton*/}
+              {/*aria-label="Edit"*/}
+              {/*onClick={() => onEdit(project.id)}*/}
+            {/*>*/}
+              {/*<EditIcon />*/}
+            {/*</IconButton>*/}
             <IconButton
               aria-label="Delete"
               onClick={() => onRemove(project.id)}

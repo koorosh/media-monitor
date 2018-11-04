@@ -4,7 +4,6 @@ import 'typeface-roboto'
 
 import Main from './containers/Main'
 import { AuthGuard } from './containers/AuthGuard'
-import './fake-chrome'
 
 const root = document.getElementById('root');
 

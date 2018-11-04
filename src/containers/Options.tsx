@@ -20,13 +20,12 @@ enum OptionsMode {
   EDIT
 }
 
-const styles = (theme: any) => ({
-  root: {
-    flexGrow: 1
-  },
+const styles: any = (theme: any) => ({
   card: {
-    minWidth: 400,
-    maxWidth: 800
+    width: 640,
+    height: 480,
+    display: 'flex',
+    flexDirection: 'column'
   },
   actions: {
     display: "flex"
@@ -41,6 +40,9 @@ const styles = (theme: any) => ({
   button: {
     margin: theme.spacing.unit,
     marginLeft: "auto"
+  },
+  content: {
+    flexGrow: 1
   }
 })
 
@@ -52,8 +54,12 @@ interface OptionsState {
   projectIdToRemove: string
 }
 
+interface OptionsProps {
+  classes: any
+}
+
 @observer
-class Options extends React.Component<any, OptionsState> {
+class Options extends React.Component<OptionsProps, OptionsState> {
   constructor(props: any) {
     super(props)
 
@@ -159,7 +165,8 @@ class Options extends React.Component<any, OptionsState> {
           {
             mode === OptionsMode.VIEW && (
               <React.Fragment>
-                <CardContent>
+                <CardContent
+                  className={classes.content}>
                   <ProjectsList
                     items={ProjectContext.projects}
                     onEdit={projectId => this.onProjectEdit(projectId)}

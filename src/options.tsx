@@ -1,6 +1,7 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import 'typeface-roboto'
+
 import Options from './containers/Options'
 import { AuthGuard } from './containers/AuthGuard'
 

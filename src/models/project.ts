@@ -7,9 +7,10 @@ export class Project extends Item {
   parentDirId: string
   spreadsheetId: string
   sheetId: string
+  spreadsheetRange: string
 
   constructor(
-    public name: string = 'New Project',
+    public name: string = 'Новий проект',
     public categories: Category[] = [],
     public isActive: boolean = false) {
     super()

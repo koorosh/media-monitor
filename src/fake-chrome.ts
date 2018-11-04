@@ -1,3 +1,7 @@
+if (!window.chrome) {
+  window.chrome = {}
+}
+
 if (!window.chrome.identity) {
   const callbacks = [];
   let isSignedIn = false;
@@ -34,6 +38,18 @@ if (!window.chrome.storage) {
       callback(storage);
     }
   };
+
+  window.chrome.storage = {
+    sync: {
+      get,
+      set,
+    },
+    local: {
+      get,
+      set,
+      clear: () => {}
+    }
+  }
 }
 
 if (!window.chrome.runtime) {

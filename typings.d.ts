@@ -1,21 +1,21 @@
 interface Window {
   chrome?: {
-    identity: any
-    storage: {
+    identity?: any
+    storage?: {
       sync: {
         get: any;
         set: any;
       },
-      local: {
+      local?: {
         set: any;
         get: any;
         clear: any;
       };
     }
-    runtime: {
+    runtime?: {
       lastError?: any
     }
-    tabs: any
+    tabs?: any
   };
 }
 

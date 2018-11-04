@@ -17,15 +17,31 @@ const spreadsheet = {
         };
         const headers = ['Date', 'Site', ...categories.map(c => c.name)];
 
-        return spreadsheet.addRow([headers], data.spreadsheetId)
-          .then(() => ({
+        return spreadsheet.addHeader([headers], data.spreadsheetId)
+          .then(({ spreadsheetRange }) => ({
             spreadsheetId: model.spreadsheetId,
-            sheetId: model.sheetId
+            sheetId: model.sheetId,
+            spreadsheetRange
           }))
       });
   },
   addRow: (data: string[][], spreadsheetId: string) => {
     return Endpoint.appendRow(data, spreadsheetId);
+  },
+  addHeader: (data: string[][], spreadsheetId: string): Promise<any> => {
+    return Endpoint.appendRow(data, spreadsheetId, undefined, 'updates.updatedRange')
+      .then((data) => {
+        const regex = /[a-z]/ig;
+        const { updates } = data
+        const { updatedRange } = updates // "'Sheet1'!A6:B6"
+        const columnsRange = updatedRange
+          .substring(updatedRange.indexOf('!') + 1)
+          .match(regex)
+          .join(':')
+        return {
+          spreadsheetRange: columnsRange
+        }
+      })
   }
 }
 

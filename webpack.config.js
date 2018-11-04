@@ -1,25 +1,30 @@
-const webpack = require('webpack');
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const webpack = require('webpack')
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+
+const keys = require('./secret/keys.json')
+
+const NODE_ENV = process.NODE_ENV
 
 const MainHtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/index.html',
   filename: 'index.html',
   inject: 'body',
-  chunks: ['main']
+  chunks: NODE_ENV === 'development' ? ['fakeDom', 'main'] : ['main']
 });
 
 const OptionsHtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/options.html',
   filename: 'options.html',
   inject: 'body',
-  chunks: ['options']
+  chunks: NODE_ENV === 'development' ? ['fakeDom', 'options'] : ['options']
 });
 
 module.exports = {
   entry: {
+    fakeDom: path.resolve(__dirname, './src/fake-chrome.ts'),
     main: path.resolve(__dirname, './src/main.tsx'),
     options: path.resolve(__dirname, './src/options.tsx')
   },
@@ -80,6 +85,9 @@ module.exports = {
       { from: 'src/assets/icon.png', to: 'icon.png' }
     ]),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.EnvironmentPlugin({
+      GOOGLE_API_KEY: keys.GOOGLE_API_KEY
+    }),
     MainHtmlWebpackPluginConfig,
     OptionsHtmlWebpackPluginConfig
   ]
