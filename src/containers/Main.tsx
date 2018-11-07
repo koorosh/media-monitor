@@ -121,28 +121,34 @@ class Main extends React.Component<any, MainState> {
             </Avatar>
           }
           action={
-            <IconButton onClick={this.handleClick}>
+            <IconButton
+              disabled={ProjectContext.projects.length === 0}
+              onClick={this.handleClick}>
               <MoreVertIcon />
             </IconButton>
           }
           title={project.name}
         />
-        <Menu
-          id="projects-list-menu"
-          anchorEl={anchorProjectsMenuEl}
-          open={Boolean(anchorProjectsMenuEl)}
-        >
-          {
-            ProjectContext.projects
-              .filter(project => !project.isActive)
-              .map(project => (
-                <MenuItem
-                  onClick={() => this.handleProjectSelect(project)}>
-                  {project.name}
-                </MenuItem>
-              ))
-          }
-        </Menu>
+        {
+          ProjectContext.projects.length > 0 && (
+            <Menu
+              id="projects-list-menu"
+              anchorEl={anchorProjectsMenuEl}
+              open={Boolean(anchorProjectsMenuEl)}
+            >
+              {
+                ProjectContext.projects
+                  .filter(project => !project.isActive)
+                  .map(project => (
+                    <MenuItem
+                      onClick={() => this.handleProjectSelect(project)}>
+                      {project.name}
+                    </MenuItem>
+                  ))
+              }
+            </Menu>
+          )
+        }
         <Divider />
         <div className={classes.options}>
           {

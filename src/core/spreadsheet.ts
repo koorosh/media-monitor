@@ -25,8 +25,8 @@ const spreadsheet = {
           }))
       });
   },
-  addRow: (data: string[][], spreadsheetId: string) => {
-    return Endpoint.appendRow(data, spreadsheetId);
+  addRow: (data: string[][], spreadsheetId: string, range?: string) => {
+    return Endpoint.appendRow(data, spreadsheetId, range);
   },
   addHeader: (data: string[][], spreadsheetId: string): Promise<any> => {
     return Endpoint.appendRow(data, spreadsheetId, undefined, 'updates.updatedRange')
