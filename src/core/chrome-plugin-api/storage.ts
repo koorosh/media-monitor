@@ -1,4 +1,4 @@
-import { forOwn, omit } from 'lodash'
+import { forOwn, omit } from 'lodash-es'
 import { isChromePluginContext } from './helpers'
 import { Project } from '../../models'
 

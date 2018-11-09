@@ -1,4 +1,4 @@
-import { maxBy, map } from 'lodash'
+import { maxBy, map } from 'lodash-es'
 import { Item } from './item'
 import { Option } from './option'
 

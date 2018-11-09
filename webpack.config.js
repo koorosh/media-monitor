@@ -32,7 +32,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].[hash].js'
   },
-  mode: 'none',
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',
@@ -80,7 +79,10 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([
-      { from: 'secret/manifest.json', to: 'manifest.json' },
+      {
+        from: NODE_ENV === 'development' ? 'secret/manifest.json' : 'secret/manifest-prod.json',
+        to: 'manifest.json'
+      },
       { from: 'src/assets/favicon.ico', to: 'favicon.ico' },
       { from: 'src/assets/icon.png', to: 'icon.png' }
     ]),
@@ -92,3 +94,5 @@ module.exports = {
     OptionsHtmlWebpackPluginConfig
   ]
 };
+
+// TODO: prod build -> version increment -> zip

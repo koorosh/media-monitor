@@ -1,4 +1,4 @@
-import { create } from 'lodash'
+import { create } from 'lodash-es'
 
 import { Category } from './category'
 import { Item } from './item'

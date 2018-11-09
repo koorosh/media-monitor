@@ -1,5 +1,5 @@
 import { computed, observable } from 'mobx'
-import { sortBy, map } from 'lodash'
+import { sortBy, map } from 'lodash-es'
 
 import { Category, Option, Project } from '../models'
 import ProjectContext from './project-context'

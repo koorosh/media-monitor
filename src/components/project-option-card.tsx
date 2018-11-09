@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as _ from 'lodash'
+import chain from 'lodash-es/chain'
 import { withStyles } from '@material-ui/core/styles'
 import FormControl from '@material-ui/core/FormControl'
 import FormLabel from '@material-ui/core/FormLabel'
@@ -65,7 +65,7 @@ class ProjectOptionCard extends React.Component<ProjectOptionCardProps, ProjectO
     this.props.onSelectedChange(selectedOptions)
   }
 
-  getSelectedOptions = (optionsState) => _.chain(optionsState)
+  getSelectedOptions = (optionsState) => chain(optionsState)
     .filter((v: [boolean, Option]) => v[0])
     .map((v: [boolean, Option]) => v[1])
     .value()
