@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack --mode=production",
-    "build-dev": "webpack --mode=development",
+    "build": "NODE_ENV=production webpack --mode=production",
+    "build-dev": "NODE_ENV=development webpack --mode=development",
     "test-units": "TS_NODE_FILES=true TS_NODE_PROJECT=tsconfig.test.json mocha -r ts-node/register -r jsdom-global/register -r src/fake-chrome.ts src/**/*.spec.ts",
     "test-ui": "jest",
     "bundle-stats": "webpack --profile --json > webpack-stats.json"
@@ -20,6 +20,7 @@
     "mobx-react": "latest",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-google-button": "^0.5.3",
     "rxjs": "^6.2.2",
     "typeface-roboto": "^0.0.54",
     "uuid": "^3.3.2"

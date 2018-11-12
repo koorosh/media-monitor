@@ -1,16 +1,31 @@
 import * as React from 'react'
+import GoogleButton from 'react-google-button'
+import { withStyles } from '@material-ui/core'
+
+const styles: any = (theme: any): any => ({
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center'
+  }
+})
 
 interface LoginFormProps {
-  onLogin: () => void
+  onLogin: () => void,
+  classes: any
 }
 
-export const LoginForm: React.SFC<LoginFormProps> = (props: LoginFormProps) => {
+const LoginForm: React.SFC<LoginFormProps> = (props: LoginFormProps) => {
+  const { classes } = props
   return (
-    <div>
-    <div>
-      Please, login with your Google Account
-    </div>
-      <button onClick={props.onLogin}>Login</button>
+    <div className={classes.container}>
+      <GoogleButton
+        onClick={() => { props.onLogin() }}
+      />
     </div>
   )
 }
+
+export default withStyles(styles)(LoginForm)

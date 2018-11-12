@@ -2,7 +2,7 @@ import * as React from 'react'
 import { observer } from 'mobx-react'
 
 import AuthContext from '../contexts/auth-context'
-import { LoginForm } from '../components/login-form'
+import LoginForm from '../components/login-form'
 
 interface AuthGuardProps {
   children: any

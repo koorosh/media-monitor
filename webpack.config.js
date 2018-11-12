@@ -6,27 +6,29 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const keys = require('./secret/keys.json')
 
-const NODE_ENV = process.NODE_ENV
+const NODE_ENV = process.env.NODE_ENV
+console.log(NODE_ENV)
 
 const MainHtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/index.html',
   filename: 'index.html',
   inject: 'body',
-  chunks: NODE_ENV === 'development' ? ['fakeDom', 'main'] : ['main']
+  chunks: NODE_ENV === 'development' ? ['main'] : ['main']
 });
 
 const OptionsHtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/options.html',
   filename: 'options.html',
   inject: 'body',
-  chunks: NODE_ENV === 'development' ? ['fakeDom', 'options'] : ['options']
+  chunks: NODE_ENV === 'development' ? [ 'options'] : ['options']
 });
 
 module.exports = {
   entry: {
-    fakeDom: path.resolve(__dirname, './src/fake-chrome.ts'),
+    // fakeDom: path.resolve(__dirname, './src/fake-chrome.ts'),
     main: path.resolve(__dirname, './src/main.tsx'),
-    options: path.resolve(__dirname, './src/options.tsx')
+    options: path.resolve(__dirname, './src/options.tsx'),
+    // analytics: path.resolve(__dirname, './src/analytics.js')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -84,7 +86,8 @@ module.exports = {
         to: 'manifest.json'
       },
       { from: 'src/assets/favicon.ico', to: 'favicon.ico' },
-      { from: 'src/assets/icon.png', to: 'icon.png' }
+      { from: 'src/assets/icon.png', to: 'icon.png' },
+      { from: 'secret/analytics.js', to: 'analytics.js' }
     ]),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin({

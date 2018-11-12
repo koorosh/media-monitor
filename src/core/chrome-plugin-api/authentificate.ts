@@ -5,15 +5,20 @@ import { isChromePluginContext } from './helpers'
 let retryCount = 0
 
 const Authenticate = {
-  getToken: () => {
+  getToken: (interactive = true) => {
     return new Promise(((resolve, reject) => {
       if(!isChromePluginContext()) {
         reject('Application runs out of Chrome Plugin context. Cannot authentificate.')
       }
 
-      window.chrome.identity.getAuthToken({ interactive: true }, (token) => {
-        if (!window.chrome.runtime.lastError) {
-          if(retryCount < 2) {
+      window.chrome.identity.getAuthToken({ interactive }, (token) => {
+        const lastError = window.chrome.runtime.lastError
+        if (lastError) {
+          if (lastError.message === 'The user did not approve access.') {
+            reject(lastError)
+          }
+
+          if (interactive && retryCount < 2) {
             retryCount++
             Authenticate.removeCachedToken(token)
               .then(() => Authenticate.getToken())
@@ -24,7 +29,7 @@ const Authenticate = {
               .catch(error => reject(error))
           } else {
             retryCount = 0
-            reject(new Error('Cannot authenticate'))
+            reject(lastError)
           }
         }
         retryCount = 0
