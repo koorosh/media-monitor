@@ -6,8 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 
 const keys = require('./secret/keys.json')
 
-const NODE_ENV = process.env.NODE_ENV
-console.log(NODE_ENV)
+const NODE_ENV = process.env.NODE_ENV;
 
 const MainHtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: './src/index.html',
@@ -82,7 +81,7 @@ module.exports = {
     new CleanWebpackPlugin(['dist']),
     new CopyWebpackPlugin([
       {
-        from: NODE_ENV === 'development' ? 'secret/manifest.json' : 'secret/manifest-prod.json',
+        from: NODE_ENV === 'development' ? 'secret/manifest-dev.json' : 'secret/manifest-prod.json',
         to: 'manifest.json'
       },
       { from: 'src/assets/favicon.ico', to: 'favicon.ico' },

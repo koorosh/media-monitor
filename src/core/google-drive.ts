@@ -1,6 +1,6 @@
 import {Request} from "./request";
 
-const API_KEY = 'AIzaSyCh4KU1aTpx9fl2TRVjxtn8aM3o1n_xFYs';
+const API_KEY = process.env.GOOGLE_API_KEY;
 
 const endpoints = {
   driveFiles: `https://www.googleapis.com/drive/v3/files`,
