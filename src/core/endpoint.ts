@@ -34,11 +34,11 @@ export const Endpoint = {
 
     const config = {
       params: {
-        range,
+        range: 'A1',
         includeValuesInResponse: 'false',
         key: API_KEY,
         valueInputOption: 'USER_ENTERED',
-        insertDataOption: 'OVERWRITE',
+        insertDataOption: 'INSERT_ROWS',
         alt: 'json'
       }
     };

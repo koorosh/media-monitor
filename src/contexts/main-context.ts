@@ -34,15 +34,14 @@ class MainContext {
           }
         })
 
-        // Cells order [ Date | URL | Category1 | Category2 | ... | CategoryN ]
+        // Cells order [ URL | Category1 | Category2 | ... | CategoryN ]
         const title = tabInfo.title.replace('"', '').replace('"','')
         const row = [
-          '',
           `=HYPERLINK("${tabInfo.tabUrl}";"${title}")`,
           ...categotyValues
         ]
 
-        return spreadsheet.addRow([row], project.spreadsheetId, project.spreadsheetRange)
+        return spreadsheet.addRow([row], project.spreadsheetId)
       })
   }
 

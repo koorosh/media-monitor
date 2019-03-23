@@ -14,7 +14,7 @@ const spreadsheet = {
             data.sheets[0].properties.sheetId : 0,
           categories
         };
-        const headers = ['Замітки', 'Сайт', ...categories.map(c => c.name)];
+        const headers = ['Сайт', ...categories.map(c => c.name)];
 
         return spreadsheet.addHeader([headers], data.spreadsheetId)
           .then(({ spreadsheetRange }) => ({
