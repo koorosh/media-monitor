@@ -20,7 +20,7 @@ export interface ProjectOptionCardState {
   customOption: Option
 }
 
-const styles = (theme) => ({
+const styles = () => ({
   checkbox: {
     width: 24,
     height: 24,
@@ -28,7 +28,9 @@ const styles = (theme) => ({
     paddingBottom: 2
   },
   textField: {
-    margin: theme.spacing.unit,
+    input: {
+      margin: 0,
+    }
   },
   formControl: {
     width: '100%'
@@ -129,12 +131,16 @@ class ProjectOptionCard extends React.Component<ProjectOptionCardProps, ProjectO
             )
           }
           <Input
+            style={{marginTop: '0px'}}
             key='custom_option'
-            className={classes.textField}
+            classes={{
+              input: classes.textField.input
+            }}
             onChange={this.handleCustomOptionChange}
             value={customOption.name}
             fullWidth
             placeholder="Інший варіант"
+            margin="dense"
             inputProps={{
               'aria-label': 'Інший варіант',
             }}
