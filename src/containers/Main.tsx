@@ -137,14 +137,16 @@ class Main extends React.Component<any, MainState> {
               open={Boolean(anchorProjectsMenuEl)}
             >
               {
-                ProjectContext.projects
-                  .filter(project => !project.isActive)
-                  .map(project => (
-                    <MenuItem
-                      onClick={() => this.handleProjectSelect(project)}>
-                      {project.name}
-                    </MenuItem>
-                  ))
+                React.Children.toArray(
+                  ProjectContext.projects
+                    .filter(project => !project.isActive)
+                    .map(project => (
+                      <MenuItem
+                        onClick={() => this.handleProjectSelect(project)}>
+                        {project.name}
+                      </MenuItem>
+                    ))
+                )
               }
             </Menu>
           )
