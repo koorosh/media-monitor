@@ -1,5 +1,4 @@
 import { Endpoint } from "./endpoint";
-import Storage from "./chrome-plugin-api/storage";
 import { Category } from '../models'
 
 const spreadsheet = {
@@ -15,7 +14,7 @@ const spreadsheet = {
             data.sheets[0].properties.sheetId : 0,
           categories
         };
-        const headers = ['Date', 'Site', ...categories.map(c => c.name)];
+        const headers = ['Дата запису', 'Сайт', ...categories.map(c => c.name)];
 
         return spreadsheet.addHeader([headers], data.spreadsheetId)
           .then(({ spreadsheetRange }) => ({

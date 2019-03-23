@@ -38,7 +38,7 @@ export const Endpoint = {
         includeValuesInResponse: 'false',
         key: API_KEY,
         valueInputOption: 'USER_ENTERED',
-        insertDataOption: 'INSERT_ROWS',
+        insertDataOption: 'OVERWRITE',
         alt: 'json'
       }
     };
