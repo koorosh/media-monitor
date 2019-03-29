@@ -1,19 +1,20 @@
-import * as React from "react"
-import { observer } from 'mobx-react'
-import { withStyles } from "@material-ui/core/styles"
-import Card from "@material-ui/core/Card"
+import * as React from 'react'
+import {observer} from 'mobx-react'
+import {withStyles} from '@material-ui/core/styles'
+import Card from '@material-ui/core/Card'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import CardActions from "@material-ui/core/CardActions"
-import CardContent from "@material-ui/core/CardContent"
-import Button from "@material-ui/core/Button"
-import red from "@material-ui/core/colors/red"
-import AddIcon from "@material-ui/icons/Add"
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import Button from '@material-ui/core/Button'
+import red from '@material-ui/core/colors/red'
+import AddIcon from '@material-ui/icons/Add'
 
-import EditProjectForm from "./../components/edit-project-form"
-import ProjectsList from "./../components/projects-list"
-import { Project } from '../models'
+import EditProjectForm from './../components/edit-project-form'
+import ProjectsList from './../components/projects-list'
+import {Project} from '../models'
 import ProjectContext from '../contexts/project-context'
 import ConfirmationDialog from '../components/confirmation-dialog'
+import googleAnalytics, {GAActions, GACategories} from '../core/google-analytics'
 
 enum OptionsMode {
   VIEW,
@@ -28,7 +29,7 @@ const styles: any = (theme: any) => ({
     flexDirection: 'column'
   },
   actions: {
-    display: "flex"
+    display: 'flex'
   },
   avatar: {
     backgroundColor: red[500]
@@ -39,7 +40,7 @@ const styles: any = (theme: any) => ({
   },
   button: {
     margin: theme.spacing.unit,
-    marginLeft: "auto"
+    marginLeft: 'auto'
   },
   content: {
     flexGrow: 1
@@ -77,6 +78,7 @@ class Options extends React.Component<OptionsProps, OptionsState> {
       mode: OptionsMode.EDIT,
       editProject: undefined
     })
+    googleAnalytics.sendEvent(GACategories.OPTIONS, GAActions.NEW_PROJECT)
   }
 
   onNewProjectSubmit = (project: Project, isNew: boolean) => {
@@ -99,11 +101,12 @@ class Options extends React.Component<OptionsProps, OptionsState> {
     if (isNew) {
       ProjectContext.createProject(project)
         .then(onSubmitted, onSubmittionFailed)
-    }
-    else {
+    } else {
       ProjectContext.updateProject(project)
         .then(onSubmitted, onSubmittionFailed)
     }
+
+    googleAnalytics.sendEvent(GACategories.OPTIONS, isNew ? GAActions.CREATE_PROJECT : GAActions.UPDATE_PROJECT, project.name)
   }
 
   onNewProjectFormClose = () => {
@@ -118,6 +121,7 @@ class Options extends React.Component<OptionsProps, OptionsState> {
       projectIdToRemove: projectId,
       isOpenConfirmationDialog: true
     })
+    googleAnalytics.sendEvent(GACategories.OPTIONS, GAActions.CLOSE_PROJECT)
   }
 
   onProjectRemoveConfirmed() {
@@ -146,14 +150,15 @@ class Options extends React.Component<OptionsProps, OptionsState> {
 
   onProjectSetActive = (projectId: string) => {
     ProjectContext.setActiveProject(projectId)
+    googleAnalytics.sendEvent(GACategories.OPTIONS, GAActions.SET_ACTIVE)
   }
 
   render() {
-    const { classes } = this.props
-    const { mode, editProject, isLoading, isOpenConfirmationDialog } = this.state
+    const {classes} = this.props
+    const {mode, editProject, isLoading, isOpenConfirmationDialog} = this.state
     return (
       <React.Fragment>
-        <CssBaseline />
+        <CssBaseline/>
         <ConfirmationDialog
           open={isOpenConfirmationDialog}
           message={'Ви дійсно хочете видалити проект?'}
@@ -183,7 +188,7 @@ class Options extends React.Component<OptionsProps, OptionsState> {
                     aria-label="Add"
                     className={classes.button}
                   >
-                    <AddIcon />
+                    <AddIcon/>
                   </Button>
                 </CardActions>
               </React.Fragment>

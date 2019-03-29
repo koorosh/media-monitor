@@ -17,6 +17,9 @@ interface Window {
     }
     tabs?: any
   };
+  _gaq: {
+    push: (args: string[]) => void
+  }
 }
 
 declare var module: any

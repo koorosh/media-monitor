@@ -1,6 +1,5 @@
 import * as React from "react"
 import { withStyles } from "@material-ui/core/styles"
-import EditIcon from "@material-ui/icons/Edit"
 import CheckCircle from "@material-ui/icons/CheckCircle"
 import Add from "@material-ui/icons/Add"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -68,13 +67,6 @@ class ProjectsList extends React.Component<ProjectsListProps, any> {
                 </IconButton>
               </Tooltip>
             }
-
-            {/*<IconButton*/}
-              {/*aria-label="Edit"*/}
-              {/*onClick={() => onEdit(project.id)}*/}
-            {/*>*/}
-              {/*<EditIcon />*/}
-            {/*</IconButton>*/}
             <IconButton
               aria-label="Delete"
               onClick={() => onRemove(project.id)}

@@ -8,6 +8,7 @@ import DialogActions from "@material-ui/core/DialogActions"
 import DialogContent from "@material-ui/core/DialogContent"
 import DialogTitle from "@material-ui/core/DialogTitle"
 import { Category, Option } from '../models'
+import googleAnalytics, {GAActions, GACategories} from '../core/google-analytics'
 
 const styles: any = theme => ({
   root: {
@@ -60,6 +61,7 @@ class EditCategoryForm extends React.Component<
 
   onSubmit = () => {
     this.props.onSubmit(this.state.category)
+    googleAnalytics.sendEvent(GACategories.OPTIONS, GAActions.ADD_CATEGORY)
     this.onClose()
   }
 
@@ -93,6 +95,7 @@ class EditCategoryForm extends React.Component<
       },
       editingOptionName: ""
     })
+    googleAnalytics.sendEvent(GACategories.OPTIONS, GAActions.ADD_CATEGORY_OPTION)
   }
 
   onKeyPress(e) {

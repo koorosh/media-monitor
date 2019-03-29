@@ -1,17 +1,21 @@
-import { fromEvent } from 'rxjs'
-import { map } from 'rxjs/operators'
-import { isChromePluginContext } from './helpers'
+import {isChromePluginContext} from './helpers'
+import googleAnalytics, {GAActions, GACategories} from '../google-analytics'
+
+interface UserInfo {
+  id: string
+  email: string
+}
 
 let retryCount = 0
 
 const Authenticate = {
-  getToken: (interactive = true) => {
+  getToken: (interactive = true): Promise<string> => {
     return new Promise(((resolve, reject) => {
       if(!isChromePluginContext()) {
         reject('Application runs out of Chrome Plugin context. Cannot authentificate.')
       }
 
-      window.chrome.identity.getAuthToken({ interactive }, (token) => {
+      window.chrome.identity.getAuthToken({ interactive }, (token: string) => {
         const lastError = window.chrome.runtime.lastError
         if (lastError) {
           if (lastError.message === 'The user did not approve access.') {
@@ -33,9 +37,11 @@ const Authenticate = {
           }
         }
         retryCount = 0
-        resolve(token)
+        window.chrome.identity.getProfileUserInfo((userInfo: UserInfo) => {
+          googleAnalytics.sendEvent(GACategories.USER, GAActions.USER_INIT, userInfo.email)
+          resolve(token)
+        })
       });
-
     }))
   },
   isLoggedIn: () => {

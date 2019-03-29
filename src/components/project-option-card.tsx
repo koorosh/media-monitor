@@ -7,6 +7,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import CardContent from '@material-ui/core/CardContent'
 import Input from '@material-ui/core/Input'
 import { Option } from '../models'
+import googleAnalytics, {GAActions, GACategories} from '../core/google-analytics'
 
 export interface ProjectOptionCardProps {
   name: string
@@ -76,6 +77,7 @@ class ProjectOptionCard extends React.Component<ProjectOptionCardProps, ProjectO
     })
     const selectedOptions: Option[] = this.getSelectedOptions(newOptionState)
     this.props.onSelectedChange(selectedOptions)
+    googleAnalytics.sendEvent(GACategories.OPTIONS, GAActions.SELECT_OPTION)
   }
 
   handleCustomOptionChange = (event: any) => {
@@ -97,6 +99,7 @@ class ProjectOptionCard extends React.Component<ProjectOptionCardProps, ProjectO
 
     const selectedOptions: Option[] = this.getSelectedOptions(newOptionState)
     this.props.onSelectedChange(selectedOptions)
+    googleAnalytics.sendEvent(GACategories.OPTIONS, GAActions.CHANGE_CUSTOM_OPTION)
   }
 
   getSelectedOptions = (optionsState) => {

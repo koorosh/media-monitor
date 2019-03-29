@@ -1,31 +1,32 @@
-import * as React from "react"
-import { withStyles } from "@material-ui/core/styles"
+import * as React from 'react'
+import {withStyles} from '@material-ui/core/styles'
 import {observer} from 'mobx-react'
 
 import Card from '@material-ui/core/Card'
-import CardActions from "@material-ui/core/CardActions"
+import CardActions from '@material-ui/core/CardActions'
 import CardHeader from '@material-ui/core/CardHeader'
-import Button from "@material-ui/core/Button"
-import Avatar from "@material-ui/core/Avatar"
-import IconButton from "@material-ui/core/IconButton"
-import MoreVertIcon from "@material-ui/icons/MoreVert"
-import red from "@material-ui/core/colors/red"
-import Divider from "@material-ui/core/Divider"
+import Button from '@material-ui/core/Button'
+import Avatar from '@material-ui/core/Avatar'
+import IconButton from '@material-ui/core/IconButton'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
+import red from '@material-ui/core/colors/red'
+import Divider from '@material-ui/core/Divider'
 import Menu from '@material-ui/core/Menu'
+import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress'
 import MenuItem from '@material-ui/core/MenuItem'
 
-import MainContext, { SaveRecord } from './../contexts/main-context'
+import googleAnalytics, {GAActions, GACategories} from '../core/google-analytics'
+import MainContext, {SaveRecord} from './../contexts/main-context'
 import ProjectContext from './../contexts/project-context'
-import { Category, Option, Project } from '../models'
+import {Category, Option, Project} from '../models'
 import ProjectOptionCard from './../components/project-option-card'
-import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress'
 
 const styles: any = (theme: any): any => ({
   card: {
     boxShadow: 'none'
   },
   actions: {
-    display: "flex"
+    display: 'flex'
   },
   avatar: {
     backgroundColor: red[500]
@@ -35,7 +36,7 @@ const styles: any = (theme: any): any => ({
     overflowY: 'auto'
   },
   circularProgress: {
-    position: "absolute"
+    position: 'absolute'
   },
 })
 
@@ -64,6 +65,8 @@ class Main extends React.Component<any, MainState> {
         [category.id]: selectedOptions
       }
     })
+
+    googleAnalytics.sendEvent(GACategories.MAIN, GAActions.SELECT_OPTION)
   }
 
   handleOnSave() {
@@ -75,6 +78,7 @@ class Main extends React.Component<any, MainState> {
         this.setState({
           isLoading: false
         })
+        googleAnalytics.sendEvent(GACategories.MAIN, GAActions.SAVE_RESULT)
         this.closePopup()
       })
   }
@@ -84,8 +88,8 @@ class Main extends React.Component<any, MainState> {
   }
 
   handleClick = event => {
-    this.setState({ anchorProjectsMenuEl: event.currentTarget });
-  };
+    this.setState({anchorProjectsMenuEl: event.currentTarget})
+  }
 
   handleProjectSelect(project: Project) {
     ProjectContext.setActiveProject(project.id)
@@ -98,8 +102,8 @@ class Main extends React.Component<any, MainState> {
 
 
   render() {
-    const { classes } = this.props
-    const { anchorProjectsMenuEl, isLoading } = this.state
+    const {classes} = this.props
+    const {anchorProjectsMenuEl, isLoading} = this.state
     const project = ProjectContext.activeProject
 
     if (!project) {
@@ -124,7 +128,7 @@ class Main extends React.Component<any, MainState> {
             <IconButton
               disabled={ProjectContext.projects.length === 0}
               onClick={this.handleClick}>
-              <MoreVertIcon />
+              <MoreVertIcon/>
             </IconButton>
           }
           title={project.name}
@@ -151,26 +155,28 @@ class Main extends React.Component<any, MainState> {
             </Menu>
           )
         }
-        <Divider />
+        <Divider/>
         <div className={classes.options}>
           {
-            project.categories.map((category: Category, index: number) =>
-              <React.Fragment>
-                <ProjectOptionCard
-                  name={category.name}
-                  options={category.options}
-                  onSelectedChange={
-                    (selectedOptions: Option[]) =>
-                      this.handleOptionChange(category, selectedOptions)
-                  }/>
-                {
-                  index < project.categories.length-1 && <Divider />
-                }
-              </React.Fragment>
+            React.Children.toArray(
+              project.categories.map((category: Category, index: number) =>
+                <React.Fragment>
+                  <ProjectOptionCard
+                    name={category.name}
+                    options={category.options}
+                    onSelectedChange={
+                      (selectedOptions: Option[]) =>
+                        this.handleOptionChange(category, selectedOptions)
+                    }/>
+                  {
+                    index < project.categories.length - 1 && <Divider/>
+                  }
+                </React.Fragment>
+              )
             )
           }
         </div>
-        <Divider />
+        <Divider/>
         <CardActions className={classes.bottomActions}>
           <Button
             variant='contained'
@@ -178,10 +184,10 @@ class Main extends React.Component<any, MainState> {
             disabled={isLoading}
             onClick={() => this.handleOnSave()}>
             <span>
-              { isLoading ? 'Збереження...' : 'Зберегти' }
+              {isLoading ? 'Збереження...' : 'Зберегти'}
             </span>
             {
-              isLoading && <CircularProgress className={classes.circularProgress} size={24} />
+              isLoading && <CircularProgress className={classes.circularProgress} size={24}/>
             }
           </Button>
         </CardActions>
