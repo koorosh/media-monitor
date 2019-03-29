@@ -65,8 +65,6 @@ class Main extends React.Component<any, MainState> {
         [category.id]: selectedOptions
       }
     })
-
-    googleAnalytics.sendEvent(GACategories.MAIN, GAActions.SELECT_OPTION)
   }
 
   handleOnSave() {

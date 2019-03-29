@@ -77,7 +77,7 @@ class ProjectOptionCard extends React.Component<ProjectOptionCardProps, ProjectO
     })
     const selectedOptions: Option[] = this.getSelectedOptions(newOptionState)
     this.props.onSelectedChange(selectedOptions)
-    googleAnalytics.sendEvent(GACategories.OPTIONS, GAActions.SELECT_OPTION)
+    googleAnalytics.sendEvent(GACategories.MAIN, GAActions.SELECT_OPTION)
   }
 
   handleCustomOptionChange = (event: any) => {
