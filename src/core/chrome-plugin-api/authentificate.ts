@@ -1,10 +1,4 @@
 import {isChromePluginContext} from './helpers'
-import googleAnalytics, {GAActions, GACategories} from '../google-analytics'
-
-interface UserInfo {
-  id: string
-  email: string
-}
 
 let retryCount = 0
 
@@ -37,10 +31,7 @@ const Authenticate = {
           }
         }
         retryCount = 0
-        window.chrome.identity.getProfileUserInfo((userInfo: UserInfo) => {
-          googleAnalytics.sendEvent(GACategories.USER, GAActions.USER_INIT, userInfo.email)
-          resolve(token)
-        })
+        resolve(token)
       });
     }))
   },
