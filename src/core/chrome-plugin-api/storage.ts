@@ -8,7 +8,7 @@ export interface StorageData {
 
 const storage = {
   updateItemByKey: (key: string, data: Project): Promise<any> => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!isChromePluginContext()) {
         reject('Application runs out of Chrome Plugin context. Cannot authentificate.')
       }
@@ -19,7 +19,7 @@ const storage = {
     })
   },
   updateAll: (data: StorageData): Promise<any> => {
-    return new Promise((resolve, reject) => {
+    return new Promise<void>((resolve, reject) => {
       if (!isChromePluginContext()) {
         reject('Application runs out of Chrome Plugin context. Cannot authentificate.')
       }
@@ -52,7 +52,7 @@ const storage = {
     })
   },
   clearAll: () => {
-    return new Promise((resolve) => {
+    return new Promise<void>((resolve) => {
       window.chrome.storage.local.clear(() => resolve());
     })
   },

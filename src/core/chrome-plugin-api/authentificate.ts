@@ -35,7 +35,7 @@ const Authenticate = {
       });
     }))
   },
-  isLoggedIn: () => {
+  isLoggedIn() {
     return this.getToken()
       .then(token => !!token)
       .catch(_ => false)
@@ -48,7 +48,7 @@ const Authenticate = {
     })
   },
   removeCachedToken: (token) => {
-    return new Promise((resolve => {
+    return new Promise<void>((resolve => {
       window.chrome.identity.removeCachedAuthToken({ token }, () => resolve())
     }))
 

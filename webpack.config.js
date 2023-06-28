@@ -2,7 +2,7 @@ const webpack = require('webpack')
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const CleanWebpackPlugin = require('clean-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const keys = require('./secret/keys.json')
 
@@ -46,8 +46,13 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react", "@babel/preset-typescript"]
+          },
+        },
       },
       {
         test: /\.css$/,
@@ -78,16 +83,19 @@ module.exports = {
     extensions: ['.js', '.jsx', '.json', '.tsx', '.ts', '.css'],
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
-    new CopyWebpackPlugin([
-      {
-        from: NODE_ENV === 'development' ? 'secret/manifest-dev.json' : 'secret/manifest-prod.json',
-        to: 'manifest.json'
-      },
-      { from: 'src/assets/favicon.ico', to: 'favicon.ico' },
-      { from: 'src/assets/icon.png', to: 'icon.png' },
-      { from: 'secret/analytics.js', to: 'analytics.js' }
-    ]),
+    new CleanWebpackPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: NODE_ENV === 'development' ? 'secret/manifest-dev.json' : 'secret/manifest-prod.json',
+          to: 'manifest.json'
+        },
+        {from: 'src/assets/favicon.ico', to: 'favicon.ico'},
+        {from: 'src/assets/icon.png', to: 'icon.png'},
+        {from: 'src/assets/gtag.js', to: 'gtag.js'},
+        {from: 'secret/analytics.js', to: 'analytics.js'}
+      ]
+    }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.EnvironmentPlugin({
       GOOGLE_API_KEY: keys.GOOGLE_API_KEY

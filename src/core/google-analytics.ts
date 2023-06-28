@@ -1,5 +1,6 @@
 const sendEvent = (category: GACategories, action: GAActions, label?: string) => {
-  window._gaq.push(['_trackEvent', category, action, label])
+  // window.dataLayer.push(['event', category, action, label])
+  window.dataLayer.push(['event', action, { 'event_category': category, 'event_label': label}])
 }
 
 export enum GACategories {

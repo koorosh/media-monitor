@@ -51,10 +51,10 @@ class ProjectOptionCard extends React.Component<ProjectOptionCardProps, ProjectO
     }
   }
 
-  componentWillReceiveProps(nextProps: ProjectOptionCardProps) {
-    if (nextProps.options !== this.props.options) {
+  componentDidUpdate(prevProps: ProjectOptionCardProps, prevState: ProjectOptionCardState) {
+    if (this.props.options !== prevProps.options) {
       this.setState({
-        optionsState: this.initOptionsState(nextProps.options)
+        optionsState: this.initOptionsState(this.props.options)
       })
     }
   }

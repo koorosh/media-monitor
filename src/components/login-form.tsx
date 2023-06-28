@@ -17,7 +17,7 @@ interface LoginFormProps {
   classes: any
 }
 
-const LoginForm: React.SFC<LoginFormProps> = (props: LoginFormProps) => {
+const LoginForm = (props: LoginFormProps) => {
   const { classes } = props
   return (
     <div className={classes.container}>

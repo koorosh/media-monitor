@@ -17,9 +17,9 @@ interface Window {
     }
     tabs?: any
   };
-  _gaq: {
-    push: (args: string[]) => void
-  }
+  dataLayer: {
+    push: (args: [string, string, {[key: string]: string}]) => void
+  };
 }
 
 declare var module: any

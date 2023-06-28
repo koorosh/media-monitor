@@ -7,7 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '@material-ui/core/Typography'
 
-interface ConfirmationDialogProps {
+type ConfirmationDialogProps = {
   onCancel: () => void
   onSubmit: () => void
   classes: any
@@ -17,13 +17,12 @@ interface ConfirmationDialogProps {
 }
 const styles: any = theme => ({ })
 
-const ConfirmationDialog: React.SFC<ConfirmationDialogProps> = (props: ConfirmationDialogProps) => {
+const ConfirmationDialog = (props: ConfirmationDialogProps) => {
   const { onCancel, onSubmit, title, message, open } = props
 
   return (
     <Dialog
       open={open}
-      disableBackdropClick
       disableEscapeKeyDown
       maxWidth="xs"
       aria-labelledby="confirmation-dialog-title"

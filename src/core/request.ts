@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 
 export function configureAxios(userToken) {
   axios.defaults.headers.common['Authorization'] = `Bearer ${userToken}`;
 }
 
 export const Request = {
-  get: (url, params) => {
+  get: (url: string, params: AxiosRequestConfig<unknown>) => {
     return axios.get(url, {
       params: params
     })
