@@ -1,4 +1,6 @@
 const sendEvent = (category: GACategories, action: GAActions, label?: string) => {
+  // TODO: disable sending any analytics events.
+  return;
   // window.dataLayer.push(['event', category, action, label])
   window.dataLayer.push(['event', action, { 'event_category': category, 'event_label': label}])
 }

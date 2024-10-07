@@ -27,11 +27,10 @@ module.exports = {
     // fakeDom: path.resolve(__dirname, './src/fake-chrome.ts'),
     main: path.resolve(__dirname, './src/main.tsx'),
     options: path.resolve(__dirname, './src/options.tsx'),
-    // analytics: path.resolve(__dirname, './src/analytics.js')
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].[hash].js'
+    filename: '[name].[chunkhash].js'
   },
   devtool: 'inline-source-map',
   devServer: {
@@ -93,7 +92,6 @@ module.exports = {
         {from: 'src/assets/favicon.ico', to: 'favicon.ico'},
         {from: 'src/assets/icon.png', to: 'icon.png'},
         {from: 'src/assets/gtag.js', to: 'gtag.js'},
-        {from: 'secret/analytics.js', to: 'analytics.js'}
       ]
     }),
     new webpack.HotModuleReplacementPlugin(),
