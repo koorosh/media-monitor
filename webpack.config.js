@@ -91,7 +91,6 @@ module.exports = {
         },
         {from: 'src/assets/favicon.ico', to: 'favicon.ico'},
         {from: 'src/assets/icon.png', to: 'icon.png'},
-        {from: 'src/assets/gtag.js', to: 'gtag.js'},
       ]
     }),
     new webpack.HotModuleReplacementPlugin(),
