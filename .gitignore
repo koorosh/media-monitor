@@ -25,3 +25,5 @@ dist
 secret
 
 webpack-stats*.json
+
+dist.zip
