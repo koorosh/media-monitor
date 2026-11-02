@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Media Monitor – Privacy Policy</title>
+<style>
+body{font:16px/1.6 system-ui,sans-serif;max-width:760px;margin:0 auto;padding:24px 16px;color:#222}
+table{border-collapse:collapse;width:100%}th,td{border:1px solid #ccc;padding:8px;text-align:left;vertical-align:top}
+code{background:#f2f2f2;padding:1px 4px;border-radius:3px}
+@media(prefers-color-scheme:dark){body{background:#161616;color:#ddd}th,td{border-color:#444}code{background:#2a2a2a}a{color:#8ab4f8}}
+</style>
+</head>
+<body>
+<h1>Privacy Policy – Media Monitor</h1>
+<p><em>Last updated: 2 November 2026</em></p>
+<p>Media Monitor ("the extension") is a Chrome extension that lets you categorize web pages and save them to a Google Spreadsheet in your own Google Drive.</p>
+<p><strong>In short: the developer does not collect, store, sell, or share any of your data. The extension has no servers, no analytics, and no advertising.</strong></p>
+
+<h2>What the extension accesses</h2>
+<table>
+<tr><th>Data</th><th>Why</th><th>Where it goes</th></tr>
+<tr><td><strong>Title and URL of the active tab</strong></td><td>Read only when you open the extension and choose to save the page, so it can be recorded under a category you selected.</td><td>Written to a spreadsheet in <strong>your</strong> Google Drive.</td></tr>
+<tr><td><strong>Google account authorization (OAuth token)</strong></td><td>To let the extension create and write to spreadsheets on your behalf. Only the <code>drive.file</code> scope is requested, which limits access to files the extension itself creates.</td><td>Held by Chrome; used only to call Google APIs directly from your browser.</td></tr>
+<tr><td><strong>Projects and categories you define</strong></td><td>To remember your settings between sessions.</td><td>Stored locally in your browser (<code>chrome.storage</code>) and in your spreadsheet.</td></tr>
+</table>
+
+<h2>What we do not do</h2>
+<ul>
+<li>We do not collect, transmit, or have access to your data. All data stays in your browser and in your own Google account.</li>
+<li>We do not use analytics, tracking, cookies, or advertising.</li>
+<li>We do not sell or transfer user data to third parties.</li>
+<li>We do not use or transfer user data for purposes unrelated to the extension's single purpose, or for creditworthiness or lending purposes.</li>
+<li>We do not run remotely hosted code.</li>
+</ul>
+
+<h2>Third-party services</h2>
+<p>The extension communicates directly with Google APIs (Google Drive and Google Sheets) from your browser to store your data. Google's handling of that data is governed by the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>. The extension's use of information received from Google APIs adheres to the <a href="https://developer.chrome.com/docs/webstore/program-policies/user-data-faq">Chrome Web Store User Data Policy</a>, including the Limited Use requirements.</p>
+
+<h2>Permissions</h2>
+<ul>
+<li><code>activeTab</code> – read the title and URL of the current tab when you use the extension.</li>
+<li><code>storage</code> – save your projects and categories locally.</li>
+<li><code>identity</code> – sign in with your Google account to access your spreadsheet.</li>
+</ul>
+
+<h2>Your control</h2>
+<p>You can delete the saved data at any time by removing the spreadsheet from your Google Drive, uninstalling the extension (which clears local storage), or revoking access at <a href="https://myaccount.google.com/permissions">myaccount.google.com/permissions</a>.</p>
+
+<h2>Changes</h2>
+<p>If this policy changes, the updated version will be published at this address with a new date.</p>
+
+<h2>Contact</h2>
+<p>Questions: <a href="mailto:mediamonitorapp@gmail.com">mediamonitorapp@gmail.com</a></p>
+</body>
+</html>
